@@ -5,17 +5,17 @@ gem 'sinatra-contrib', require: 'sinatra/reloader'
 
 gem 'activerecord', :require => 'active_record'
 gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
-
-gem 'json'
-gem 'rspec'
-gem 'sqlite3'
 gem 'rake'
-gem 'rack'
-gem 'logger'
+gem 'require_all'
+gem 'sqlite3'
 gem 'thin'
 gem 'shotgun'
 gem 'pry'
-
-gem 'rack-flash3'
-gem 'tux'
 gem 'bcrypt'
+gem "tux"
+
+gem 'json'
+gem 'rspec'
+gem 'rack'
+gem 'logger'
+gem 'rack-flash3'
