@@ -1,10 +1,11 @@
-module Concerns::Searchable
-
-    def name
+module Slugifiable
+    def slug
       obj = self.name.downcase
       obj.gsub(" ", "-")
     end
+  end
 
+module Slugifiable
     def search_by_name(name)
       self.all.detect{|name| s.slug == slug}
     end
