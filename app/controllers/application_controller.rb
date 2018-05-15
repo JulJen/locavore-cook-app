@@ -2,7 +2,7 @@ require './config/environment'
 
 class ApplicationController < Sinatra::Base
   register Sinatra::ActiveRecordExtension
-  
+
   configure :development do
     register Sinatra::Reloader
   end
