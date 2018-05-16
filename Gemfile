@@ -9,14 +9,6 @@ gem 'rake'
 gem 'thin'
 gem 'require_all'
 
-# # howard's changes
-# gem 'sinatra'
-# gem 'activerecord', '~> 4.2', '>= 4.2.6', :require => 'active_record'
-# gem 'sinatra-activerecord', :require => 'sinatra/activerecord'
-# gem 'rake'
-# gem 'require_all'
-# gem 'thin'
-# # end howard's changes
 
 gem 'bcrypt'
 gem 'rspec'
