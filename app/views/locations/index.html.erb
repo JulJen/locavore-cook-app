@@ -1,0 +1,7 @@
+<h1>Location</h1>
+
+<ul>
+  <% Location.all.each do |state| %>
+    <li><a href="locations/<%= location.name %>.html"><%= location.name %></a><li>
+  <% end %>
+</ul>

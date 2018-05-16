@@ -23,8 +23,6 @@ GEM
     eventmachine (1.2.7)
     i18n (1.0.1)
       concurrent-ruby (~> 1.0)
-    json (2.1.0)
-    logger (1.2.8)
     method_source (0.9.0)
     minitest (5.11.3)
     multi_json (1.13.1)
@@ -100,8 +98,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord
   bcrypt
-  json
-  logger
   pry
   rack
   rack-flash3
