@@ -1,0 +1,17 @@
+<h2>Welcome <%= @user.username %>, start your recipe here:</h2>
+
+  <form action="/recipes" method ="POST">
+    <label>Add Recipe Name:</label>
+    <input id="new_recipe" type="text" name="name">
+
+    <br><br>
+
+    <form action="/recipes" method ="POST">
+      <label>Add Ingredient Name(s):</label>
+      <input id="new_ingredient" type="text" name="ingredient[name]">
+    <br><br>
+
+  <input type="submit" value="submit">
+</form>
+
+</p>Back to <a href="/show">main page</a></p>

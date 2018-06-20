@@ -1,0 +1,19 @@
+<h2>Welcome <%= @user.username %>, see all your latest recipes!</h2>
+
+<br><br>
+
+<h2> Your Recipes: </h2>
+
+<ul>
+  <% @user.recipes.each do |recipe| %>
+    <li><a href="recipes/<%= recipe.id %>.html"><%= recipe.name %></a><li>
+  <% end %>
+</ul>
+
+<% if @user.recipes.length == 0 || params[:name] == "" %>
+    <p>Doesn't look like you have any recipes yet, create one <a href="/recipes/new">here!</a></p>
+<% end %>
+
+<br><br>
+
+<p><a href="/logout">Log Out</a></p>

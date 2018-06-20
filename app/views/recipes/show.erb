@@ -1,0 +1,12 @@
+<h2>Hi <%= @user.username %>, your latest recipe:</h2>
+
+<h2>Name: <%=@recipe.name%></h2>
+
+<h2>Ingredients:</h2>
+<% @recipe.recipe_ingredients.each do |ingredient|%>
+  <%= ingredient.name%>
+<% end %>
+
+<% if @recipe.recipe_ingredients.length == 0 %>
+"Not working!"
+<% end %>
