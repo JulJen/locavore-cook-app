@@ -10,16 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_15_171343) do
+ActiveRecord::Schema.define(version: 2018_06_15_171614) do
 
   create_table "ingredients", force: :cascade do |t|
     t.string "name"
-    t.string "ingredient_by_season"
-  end
-
-  create_table "recipe_ingredients", force: :cascade do |t|
-    t.integer "ingredient_id"
-    t.string "recipe_id"
+    t.string "season"
+    t.integer "recipe_id"
   end
 
   create_table "recipes", force: :cascade do |t|
@@ -33,7 +29,7 @@ ActiveRecord::Schema.define(version: 2018_05_15_171343) do
     t.string "name"
     t.string "email"
     t.string "state"
-    t.string "region"
+    t.string "content"
     t.string "password_digest"
   end
 
