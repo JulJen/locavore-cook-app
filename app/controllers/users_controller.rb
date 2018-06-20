@@ -109,15 +109,10 @@ class UsersController < ApplicationController
       end
       @user.save
       redirect '/show'
-      # end
-      # else
-        # redirect "/user/edit_account"
-      # end
     else
       redirect '/login'
     end
   end
-
 
 #user log-out
   get '/logout' do
