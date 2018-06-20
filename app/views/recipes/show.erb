@@ -1,12 +1,16 @@
-<h2>Hi <%= @user.username %>, your latest recipe:</h2>
+<h2>Hi <%= @user.username %>, review your latest recipe:</h2>
 
-<h2>Name: <%=@recipe.name%></h2>
+</p><a href="/recipes/<%= @recipe.id %>/edit">Update</a> your recipe</p>
 
-<h2>Ingredients:</h2>
-<% @recipe.recipe_ingredients.each do |ingredient|%>
+<h3>Recipe: <%=@recipe.name%></h3>
+
+<h3>Ingredients:</h3>
+<% @recipe.ingredients.each do |ingredient|%>
   <%= ingredient.name%>
 <% end %>
 
-<% if @recipe.recipe_ingredients.length == 0 %>
+<% if @recipe.ingredients.length == 0 %>
 "Not working!"
 <% end %>
+
+<p>Return to <a href="/show">Home</a> or <a href="/logout">Log Out</a></p>

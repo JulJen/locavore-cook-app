@@ -1,17 +1,19 @@
-<h2>Welcome <%= @user.username %>, start your recipe here:</h2>
+<body>
+  <h2>Welcome <%= @user.username %>, start your recipe here:</h2>
 
   <form action="/recipes" method ="POST">
     <label>Add Recipe Name:</label>
-    <input id="new_recipe" type="text" name="name">
+    <input id="new_recipe" type="text" name="recipe[name]" placeholder="Recipe Name:">
 
     <br><br>
 
     <form action="/recipes" method ="POST">
       <label>Add Ingredient Name(s):</label>
-      <input id="new_ingredient" type="text" name="ingredient[name]">
+      <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredients:">
     <br><br>
 
   <input type="submit" value="submit">
-</form>
+  </form>
 
-</p>Back to <a href="/show">main page</a></p>
+  </p>Back to <a href="/show">main page</a></p>
+</body>
