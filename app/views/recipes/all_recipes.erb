@@ -1,19 +1,19 @@
-<h2>Welcome <%= @user.username %>, see all your latest recipes!</h2>
+<body>
+  <h1>Locavore Kitchen App</h1>
 
-<br><br>
+  <h2>Listing all Recipes</h2>
 
-<h2> Your Recipes: </h2>
+  <br><br>
 
-<ul>
-  <% @user.recipes.each do |recipe| %>
-    <li><a href="recipes/<%= recipe.id %>.html"><%= recipe.name %></a><li>
-  <% end %>
-</ul>
+  <h2>Recipes by <%= @user.username %>: </h2>
 
-<% if @user.recipes.length == 0 || params[:name] == "" %>
-    <p>Doesn't look like you have any recipes yet, create one <a href="/recipes/new">here!</a></p>
-<% end %>
+  <ul>
+    <% @user.recipes.each do |recipe| %>
+      <li><a href="recipes/<%= recipe.id %>.html"><%= recipe.name %></a></li>
+    <% end %>
+  </ul>
 
-<br><br>
+  <br><br>
 
-  <p>Return to <a href="/show">Account Home</a> or <a href="/logout">Log Out</a></p>
+  <p>Return to <a href="/show">Home</a> or <a href="/logout">Log Out</a></p>
+</body>
