@@ -1,32 +1,28 @@
 <body>
-  <h2>Locavore Kitchen App</h2>
+  <h1>Locavore Kitchen App</h1>
 
-  <h3>Curent account info: </h3>
-  <h4>Username: <%= @user.username %></h4>
-  <h4>Name: <%= @user.name %></h4>
-  <h4>Email: <%= @user.email %></h4>
-  <h4>State: <%= @user.state %></h4>
-  <h4>Description: <%= @user.content %></h4>
+  <h2>Hi <%= @user.username %>, edit your account info: </h2>
 
-  <br><br>
-
-  <label>Update account info:</label>
+  <label></label>
   <form action="/show" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
 
-    <br><br>
+    <p>Not located in <b><%= @user.state %></b> ?<p>
 
-    <label>State: </label>
-    <input type="text" id="state" name="state" placeholder="state postal code">
+    <b><label>State: </label></b>
+    <input type="text" id="state" name="state" placeholder="ex. NY, NJ, PA, etc.">
 
-    <label>Description: </label>
-    <input type="text" id="content" name="content" placeholder="about you">
+    <p>Update about you: <%= @user.username %> loves <%= @user.content %></p>
+
+    <b><label><%= @user.username %> loves: </label></b>
+    <input type="text" id="content" name="content" placeholder="<%= @user.username %> loves:">
 
     <br><br>
 
     <input type="submit" value="update">
   </form>
 
+  <br><br>
 
   <p>Return to <a href="/show">Home</a> or <a href="/logout">Log Out</a></p>
 </body>

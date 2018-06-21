@@ -3,17 +3,24 @@
 
   <h2>Introduce yourself to the community:</h2>
 
-  <label>State</label>
-  <input type="text" id="state" name="state" placeholder="state postal code">
+  <h3>Where are you from? </h3>
+
+  <form action="/more_info" method="POST">
+  <b><label>State postal code: </label></b>
+  <input type="text" id="state" name="state" placeholder="ex. NY, NJ, or PA">
 
   <br><br>
 
-  <label>Description</label>
-  <input type="text" id="about" name="about" placeholder="about you">
+  <h3>What do you like about being a locavore? </h3>
+  <b><label><%= @user.username %> loves: </label></b>
+  <input type="text" id="content" name="content" placeholder="<%= @user.username %> loves:">
+
   <br><br>
 
-  <input type="submit" value="submit">
+  <input id="More Info" type="submit" value="introduce me">
   </form>
 
-  <p>If you aren't interested, please <a href="/show">skip ahead</a>!</p>
+  <br><br>
+
+  <p>Not sure if you want to add more info? <a href="/show">Skip ahead</a>!</p>
 </body>
