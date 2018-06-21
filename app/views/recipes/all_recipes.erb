@@ -1,17 +1,25 @@
 <body>
   <h1>Locavore Kitchen App</h1>
 
-  <h2>Listing all Recipes</h2>
+  <h2>All Recipes by <%= @user.username %>: </h2>
 
-  <br><br>
+  <p>Create <a href="/new">new recipe</a> !</p>
 
-  <h2>Recipes by <%= @user.username %>: </h2>
-
-  <ul>
-    <% @user.recipes.each do |recipe| %>
+  <% @user.recipes.each do |recipe| %>
+    <ul>
       <li><a href="recipes/<%= recipe.id %>.html"><%= recipe.name %></a></li>
+    </ul>
+  <% end %>
+<!--
+  <% if @recipes.name == "" %>
+      <p>No recipes yet, create <a href="/new">new recipe </a>!</p>
+  <% end %> -->
+
+  <!-- <% if @user.recipes.name == @user.recipes.name %>
+    <% @user.recipes.each do |recipe| %>
+      <p><b><%= recipe.name %></b> has a duplicate. <a href="recipes/<%= recipe.id %>.html/edit">Update!</a></p>
     <% end %>
-  </ul>
+  <% end %> -->
 
   <br><br>
 

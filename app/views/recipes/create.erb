@@ -1,4 +1,6 @@
 <body>
+  <h1>Locavore Kitchen App</h1>
+
   <h2>Welcome <%= @user.username %>, start your recipe here:</h2>
 
   <form action="/recipes" method ="POST">
@@ -7,12 +9,12 @@
 
     <br><br>
 
-    <form action="/recipes" method ="POST">
-      <label>Add Ingredient Name(s):</label>
-      <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredients:">
+    <label>Add Ingredient Name(s):</label>
+    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredients:">
+
     <br><br>
 
-  <input type="submit" value="submit">
+    <input type="submit" value="submit">
   </form>
 
   <p>Return to <a href="/show">Home</a> or <a href="/logout">Log Out</a></p>
