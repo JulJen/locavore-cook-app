@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :recipes
+  has_many :ingredients
   # has_many :recipe_ingredients
   # has_many :ingredients, through: :recipe_ingredients
   has_secure_password
