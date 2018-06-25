@@ -19,31 +19,41 @@ class ApplicationController < Sinatra::Base
   end
 
 
-    helpers do
-      def logged_in?
-        !!session[:user_id]
-      end
 
-      def current_user
-        User.find_by_id(session[:user_id])
-      end
+  helpers do
+    def logged_in?
+      !!session[:user_id]
+    end
 
-      # def create_new_user
-      #   true if !user_fields_empty?
-      #   @user = User.create(:name => params[:name], :email => params[:email], :username => params[:username], :password => params[:password])
-      #   @user.save
-      #   session[:user_id] = @user.id
-      # rescue false
-      # end
-      # end
+    # def current_user
+    #   User.find_by_id(session[:user_id])
+    # end
 
-      def user_passfail
-        true if User.find_by(:username => params[:username]) && user.authenticate(params[:password]) rescue false
-      end
-
-      def user_fields_empty?
-        true if params[:name] == "" || params[:username] == "" || params[:email] == "" || params[:password] == "" rescue false
+    def current_user
+      begin
+        @current_user = User.find(session["user_id"].to_i)
+      rescue
+        @current_user = nil
       end
     end
 
+    def user_passfail
+      true if User.find_by(:username => params[:username]) && user.authenticate(params[:password]) rescue false
+    end
+
+    def user_fields_empty?
+      true if params[:name] == "" || params[:username] == "" || params[:email] == "" || params[:password] == "" rescue false
+    end
+
+    # | !params[:email] == "@.com" |
+
+    def user_more_info_empty?
+      true if params[:state] == "" && params[:content] == "" rescue false
+    end
+
+    # def user_recipe_empty?
+    #   true if params[:name] == "" && params[:content] == "" rescue false
+    # end
   end
+
+end
