@@ -3,7 +3,12 @@
 
   <h2>Welcome, <%= @user.username %>!</h2>
 
-  <p>Review all your <a href="/all_recipes">Recipes</a> here!</p>
+  <% if @recipes.length == 0 %>
+      <p>Doesn't look like you have any recipes yet!</p>
+      <p>Create a <a href="/new_recipe">new recipe</a>!</p>
+  <% elsif @recipes.length != 0 %>
+      <p>Review all your <a href="/all_recipes">Recipes</a> here!</p>
+  <% end %>
 
   <br><br>
 
@@ -13,7 +18,7 @@
   <h4>Name: <%= @user.name %></h4>
   <h4>Email: <%= @user.email %></h4>
 
-  <h3>About you: <h3>
+  <h2>About you: <h2>
   <h4>State: <%= @user.state %></h4>
   <h4><%= @user.username %> loves: <%= @user.content %></h4>
 
