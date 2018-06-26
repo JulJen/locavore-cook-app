@@ -14,6 +14,7 @@ gem 'bcrypt'
 gem 'rspec'
 gem 'rack'
 gem 'rack-flash3'
+gem "activemodel", require: "active_model"
 
 group :development do
 		gem 'shotgun'
