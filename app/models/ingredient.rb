@@ -1,7 +1,7 @@
 class Ingredient < ActiveRecord::Base
   belongs_to :recipe
   belongs_to :user
-  
+
   # has_many :users, through: :recipes
 
   # include ActiveModel::Validations
