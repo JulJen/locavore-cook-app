@@ -1,54 +1,38 @@
-<body>
-  <h1>Locavore Kitchen App</h1>
-  <h2>Hi <%= @user.username %>, edit your latest recipe:</h2>
+<label></label>
+<form action="/recipes/<%= @recipe.id %>" method="post">
+  <input type="hidden" id="hidden" name="_method" value="patch">
 
-  <h3>Name: <%= @recipe.name %></h3>
-
-  <h3>Ingredients:</h3>
-  <ul>
-  <% @recipe.ingredients.each do |ingredient|%>
-    <li><%= ingredient.name %></li>
-  <% end %>
-  </ul>
-
-  <% if @recipe.name == ' ' %>
-      <p>Oops! No recipe name?</p>
-    <% end %>
-  <% end %>
-
-  <% if @recipe.ingredients.length == 0 %>
-      <p>Oops! Doesn't look like you have any ingredients yet.</p>
-  <% end %>
-
-  <label></label>
-  <form action="/recipes/<%= @recipe.id %>" method="post">
-    <input type="hidden" id="hidden" name="_method" value="patch">
-
-    <br><br>
-
-    <label><b>Update name: </b></label>
-    <input type="text" id="new_recipe" name="recipe[name]" placeholder="Recipe Name:">
-
-    <br><br>
-
-    <label><b>Add new ingredient: </b></label>
-    <input type="text" id="new_ingredient" name="ingredient[name]" placeholder="Ingredients:">
-
-    <br><br>
-
-    <input type="submit" value="update">
-  </form>
+  <label><b>Update name: </b></label>
+  <input id="update_recipe" type="text" name="recipe[name]" placeholder="<%=@recipe.name%>">
 
   <br><br>
 
-  <p>Don't like what you see? Delete <%=@recipe.name%>:</p>
-
-  <form action="/recipes/<%= @recipe.id %>/delete" method="POST">
-    <input type="hidden" id="hidden" name="_method" value="DELETE">
-    <input type="submit" value="delete recipe">
-  </form>
+  <label><b>Update ingredient: </b></label>
+  <input id="update_ingredient" type="text" name="ingredient[name]" placeholder="<%=@ingredient.name%>">
 
   <br><br>
 
-  <p>Return to <a href="/show">Home</a> or <a href="/logout">Log Out</a></p>
-</body>
+  <input type="submit" value="update">
+</form>
+
+<label></label>
+<form action="/recipes/<%= @recipe.id %>" method="post">
+  <input type="hidden" id="hidden" name="_method" value="patch">
+  <label><b>Add ingredient: </b></label>
+  <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="new ingredient">
+
+  <br><br>
+
+  <input type="submit" value="add">
+</form>
+
+<br><br>
+
+<p>Don't like what you see?</p>
+<p>Delete recipe: <b><%=@recipe.name%></b></p>
+
+<form action="/recipes" method="POST">
+  <input type="hidden" id="hidden" name="_method" value="delete">
+
+  <input type="submit" value="delete">
+</form>

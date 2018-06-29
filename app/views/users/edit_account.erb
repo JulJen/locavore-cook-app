@@ -7,15 +7,25 @@
   <form action="/show" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
 
-    <p>Not located in <b><%= @user.state %></b> ?<p>
+    <% if params[:state] == nil || params[:state] == "" %>
+      <p>Let users know what state you're from! Add below:</p>
+    <% else %>
+      <p>Not located in <b><%= @user.state %></b> ?<p>
+    <% end %>
 
     <b><label>State: </label></b>
-    <input type="text" id="state" name="state" placeholder="ex. NY, NJ, PA, etc.">
+    <input id="new_state" type="text"  name="state" placeholder="ex. NY, NJ, PA, etc.">
 
-    <p>Update about you: <%= @user.username %> loves <%= @user.content %></p>
+    <br><br>
+
+    <% if params[:bio] == nil || params[:bio] == "" %>
+      <p>What do you love about being a locavore? Add below:</p>
+    <% else %>
+      <p>Previous about you: <%= @user.username %> loves <b><%= @user.bio %></b> ...</p>
+    <% end %>
 
     <b><label><%= @user.username %> loves: </label></b>
-    <input type="text" id="content" name="content" placeholder="<%= @user.username %> loves:">
+    <input id="new_bio" type="text"  name="bio" placeholder="<%= @user.username %> loves:">
 
     <br><br>
 
@@ -24,5 +34,5 @@
 
   <br><br>
 
-  <p>Return to <a href="/show">Home</a> or <a href="/logout">Log Out</a></p>
+  <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
 </body>

@@ -7,17 +7,17 @@
 
   <form action="/more_info" method="POST">
   <b><label>State postal code: </label></b>
-  <input type="text" id="state" name="state" placeholder="ex. NY, NJ, or PA">
+  <input id="new_state" type="text"  name="state" placeholder="ex. NY, NJ, or PA">
 
   <br><br>
 
   <h3>Share your likes, what makes you a locavore? </h3>
   <b><label><%= @user.username %> loves: </label></b>
-  <input type="text" id="content" name="content" placeholder="<%= @user.username %> loves:">
+  <input id="new_bio" type="text"  name="bio" placeholder="<%= @user.username %> loves:">
 
   <br><br>
 
-  <input id="More Info" type="submit" value="introduce me">
+  <input id="More Info" type="submit" value="introduce me!">
   </form>
 
   <br><br>

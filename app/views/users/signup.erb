@@ -1,31 +1,28 @@
-<body>
-  <h2>Welcome to Locavore Kitchen!</h2>
-  <h3>Create an account:</h3>
+<form action="/signup" method="POST">
 
-  <form action="/signup" method="POST">
+  <label>First name: </label>
+  <input id="new_first_name" type="text" name="fname" placeholder="first name">
 
-    <label>Name: </label>
-    <input id="name" type="name" name="name" placeholder="first & last name">
+  <label>Last name: </label>
+  <input id="new_last_name" type="text" name="lname" placeholder="last name">
 
-    <br><br>
+  <br><br>
 
-    <label>Email: </label>
-    <input id= "email" type="email" name="email" placeholder="Email:">
 
-    <br><br>
+  <label>Email: </label>
+  <input id= "new_email" type="text" name="email" placeholder="Email:">
 
-    <label>Username: </label>
-    <input id="username" type="username" name="username" placeholder="Aa-Zz, numbers 0-9">
+  <br><br>
 
-    <br><br>
+  <label>Username: </label>
+  <input id="new_username" type="text" name="username" placeholder="Aa-Zz, numbers 0-9">
 
-    <label>Password: </label>
-    <input id= "password" type="password" name="password" placeholder="Password:">
+  <br><br>
 
-    <br><br>
+  <label>Password: </label>
+  <input id= "new_password" type="password" name="password" placeholder="Password:">
 
-    <input id="Sign Up" type="submit" value="Sign Up">
-  </form>
+  <br><br>
 
-  <p>Return to Locavore Kitchen - <a href="/">Main Page</a>
-</body>
+  <input id="Sign Up" type="submit" value="Sign Up">
+</form>
