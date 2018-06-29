@@ -1,0 +1,32 @@
+<!-- <%# user.erb %> -->
+<html>
+  <head>
+    <title>Locavore Kitchen App</title>
+  </head>
+  <body>
+    <% if user_fields_empty? %>
+      <h2><%= incomplete_message %><h2>
+    <% else %>
+      <h1><%= default_message %></h1>
+    <% end %>
+
+    <% if request.path_info.start_with?('/new') %>
+      <h2>Hi <%= name %>, start your recipe here:</h2>
+    <% end %>
+
+    <% if request.path_info.start_with?('/show') %>
+      <h2>Hi <%= name %>!</h2>
+    <% end %>
+
+    <!-- This is where the page contents gets inserted -->
+    <%= yield %>
+
+    <br><br>
+
+    <% if request.path_info.start_with?('/show') %>
+      <p><a href="/account">Account</a> <a href="/logout">Log Out</a></p>
+    <% else %>
+      <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
+    <% end %>
+  </body>
+</html>

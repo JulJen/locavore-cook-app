@@ -1,0 +1,18 @@
+<!-- <%# error.erb %> -->
+<html>
+  <head>
+    <title>Locavore Kitchen App</title>
+  </head>
+  <body>
+    <h1><%= error_message %></h1>
+
+    <!-- This is where the page contents gets inserted -->
+    <%= yield %>
+
+    <br><br>
+
+    <p>New user? <b><a href="/signup">Sign-up</a></b> or Existing user? <b><a href="/login">Log-in</a></b>
+
+  </body>
+
+</html>
