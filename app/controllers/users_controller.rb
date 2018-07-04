@@ -112,7 +112,7 @@ class UsersController < ApplicationController
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
-      # @recipes = Recipe.all
+      @recipes = Recipe.all
       # if @recipe.name == nil
       erb :'users/show_user', default_layout
     else
@@ -159,9 +159,10 @@ class UsersController < ApplicationController
   get '/logout' do
     if logged_in?
       session.clear
+      @current_user = nil
       redirect '/'
     else
-      redirect '/all_recipes'
+      redirect '/failure'
     end
   end
 

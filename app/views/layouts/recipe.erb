@@ -10,33 +10,8 @@
       <h1><%= default_message %></h1>
     <% end %>
 
-    <% if request.path_info.start_with?('/show') %>
-      <h2>Hi <%= @user.username %>, here's your latest recipe:</h2>
-    <% end %>
-    
-    <% if request.path_info.start_with?('/recipes') %>
-      <h2>Hi <%= @user.username %>, edit your recipe:</h2>
 
-      <% if @recipe.name == nil || @recipe.name == " "%>
-        <p>Oops! No recipe name?</p>
-      <% else %>
-        <h3>Recipe Name: <%= @recipe.name %></h3>
-      <% end %>
 
-    <h3>Ingredients:</h3>
-
-    <% if @ingredient.name.length == 0 %>
-      <p>Oops, doesn't look like you have any ingredients yet!</p>
-    <% end %>
-
-    <% if @ingredient.name.size > 1 %>
-      <ul><li><%= @ingredient.name %></li></ul>
-    <% else %>
-      <% @ingredients.each do |ingredient|%>
-      <ul><li><%= ingredient.name %></li></ul>
-      <% end %>
-    <% end %>
-  <% end %>
 
     <!-- This is where the page contents gets inserted -->
     <%= yield %>

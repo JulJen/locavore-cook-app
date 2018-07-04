@@ -1,14 +1,6 @@
 class User < ActiveRecord::Base
-  # has_many :recipes
-  # has_many :ingredients, through: :recipes
-  # has_secure_password
   has_secure_password
-  has_many :ingredients
-  has_many :recipes, through: :ingredients
-
-
-
-
+  has_many :recipes
 
   # include ActiveModel::Validations
   #
@@ -17,8 +9,6 @@ class User < ActiveRecord::Base
   # validates :password, length: { in: 1..10 }
   # validates :state, length: { minimum: 2, maximum: 2 }
   # validates :content, length: { minimum: 3, maximum: 50 }
-
-
   def slug
    self.username.gsub(" ", "-").downcase
   end

@@ -1,12 +1,20 @@
 <body>
   <form action="/recipes" method ="POST">
-    <label>Add Recipe Name:</label>
+    <label>Recipe name:</label>
     <input id="new_recipe" type="text" name="recipe[name]" placeholder="Recipe Name:">
 
     <br><br>
 
-    <label>Add Ingredient Name(s):</label>
-    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredients:">
+    <label>Add first ingredient:</label>
+    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredient:">
+
+    <label>Add quantity:</label>
+    <input id="quantity" type="text" name="recipe_ingredient[quantity]" placeholder="Quantity:">
+
+    <br><br>
+
+    <label>Description:</label>
+    <input id="content" type="text" name="recipe[content]" placeholder="Description:">
 
     <br><br>
 

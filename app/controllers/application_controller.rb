@@ -69,20 +69,28 @@ class ApplicationController < Sinatra::Base
       end
     end
 
-#controllers
+
+#users_controller  and recipes_controller
     def logged_in?
       session[:user_id]
       # !!session[:user_id]
     end
 
     def current_user
-      @user = User.find(session[:user_id])
+      # when we log out, we would want to execute:
+      # @current_user = nil
+      @current_user ||= User.find(session[:user_id]) if session[:user_id]
     end
 
     def current_recipe
-      @recipe = Recipe.find_by(session[:recipe_id])
+      @current_recipe ||= Recipe.find_by(params[:id]) if Recipe.last
     end
 
+    def current_ingred
+      @current_ingred ||= Ingredient.find_by(params[:id]) if Ingredient.last
+    end
+
+#users_controller
     def user_passfail?
       true if User.find_by(:username => params[:username]) && user.authenticate(params[:password_digest]) rescue false
     end
@@ -95,8 +103,9 @@ class ApplicationController < Sinatra::Base
       true if params[:state] == "" || params[:bio] == "" rescue false
     end
 
+#RecipesController
     def recipe_fields_empty?
-      true if params[:recipe][:name].empty? && !params[:ingredient][:name].empty? rescue false
+      true if params[:recipe][:name].empty? && params[:recipe][:content].empty? && params[:ingredient][:name].empty? && params[:recipe_ingredient][:quantity].empty?  rescue false
     end
 
     def recipe_pass?
@@ -104,5 +113,4 @@ class ApplicationController < Sinatra::Base
     end
 
   end
-
 end

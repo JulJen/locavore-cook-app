@@ -1,8 +1,11 @@
 <body>
-  <% if @recipe == nil %>
+
+  <% if @user.recipes.length == 0 %>
     <p>Doesn't look like you have any recipes yet!</p>
-    <p>Create a <a href="/new">new recipe</a>!</p>
   <% else %>
-    <p>Review all your <a href="/all">Recipes</a> here!</p>
+    <p>Review all your <a href="/recipes">Recipes</a></p>
+    <p>OR</p>
   <% end %>
+  <p>Create a <a href="/new">New Recipe</a></p>
+
 </body>

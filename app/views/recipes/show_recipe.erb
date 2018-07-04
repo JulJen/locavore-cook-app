@@ -1,10 +1,25 @@
 <body>
+    <h3>Recipe: <%= @recipe.name %></h3>
 
-  </p><a href="/recipes/<%= @recipe.id %>/edit">Update recipe</a></p>
+    <h3>Ingredients: </h3>
+    </p><a href="/recipes/<%= @recipe.id %>/add">Add ingredients</a></p>
 
-  <form action="/recipes/<%= @recipe.id %>/delete" method="POST">
-    <input type="hidden" id="hidden" name="_method" value="delete">
-    <input type="submit" value="delete recipe">
-  </form>
+    <% if !@recipe_ingredients == 0 %>
+      <% @recipe_ingredients.each do |ingredient| %>
+        <% if ingredient.recipe_id == @recipe.id %>
+          <ul><li><%= ingredient.quantity %> <%= @ingredient.name %></a></li></ul>
+        <% end %>
+      <% end %>
+      <% else %>
+        <p>You don't have any ingredients yet.</p>
+    <% end %>
+
+
+
+    <h3>Description:</h3>
+    <p><%= @recipe.content %></p>
+
+
+</p><a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
 
 </body>
