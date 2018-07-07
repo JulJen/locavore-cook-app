@@ -1,0 +1,33 @@
+<body>
+  <h3>Add ingredients to: "<%= @recipe.name %>"</h3>
+
+  <form action="/recipes/<%= @recipe.id %>" method ="POST">
+
+    <% if !@recipe.recipe_ingredients.empty? %>
+      <p>Choose existing ingredient: </p>
+      <% @recipe.recipe_ingredients.each do |ingredient| %>
+        <input type="checkbox" name="recipe[ingredient_ids][]" value="<%=ingredient.id%>" id="<%=ingredient.id%>"><%=ingredient.name%></input>
+        <%'checked' if @recipe.ingredients.include?(ingredient)%>
+      <%end%>
+    <%end%>
+
+    <br></br>
+
+    <label>Add new ingredient:</label>
+    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredient:">
+
+    <br><br>
+
+    <label>Add quantity:</label>
+    <input id="new_quantity" type="text" name="recipe_ingredient[quantity]" placeholder="Quantity:">
+
+    <br><br>
+
+    <input type="submit" value="Update">
+  </form>
+
+  <br><br>
+
+  </p><a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
+  <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
+</body>

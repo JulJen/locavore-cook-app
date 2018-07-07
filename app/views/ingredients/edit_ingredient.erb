@@ -1,0 +1,32 @@
+<body>
+  <h2>Ingredient: <%= @ingredient_name %></h2>
+
+  <br><br>
+
+  <form action="/ingredients/<%= @ingredient_id %>" method="post">
+    <input type="hidden" id="hidden" name="_method" value="patch">
+
+    <label><b>Update ingredient: </b></label>
+    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="<%= @ingredient_name %>">
+
+    <label><b>Edit quantity: </b></label>
+    <input id="new_quantity" type="text" name="recipe_ingredient[quantity]" placeholder="<%= @ingredient_quantity %>">
+
+    <br><br>
+
+    <input type="submit" value="update">
+  </form>
+
+  <p>OR</p>
+
+  <form action="/ingredients/<%= @ingredient_id %>/delete" method="POST">
+    <input type="hidden" id="hidden" name="_method" value="delete">
+
+    <input type="submit" value="delete">
+  </form>
+
+  <br><br>
+
+  </p><a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
+  <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
+</body>

@@ -1,6 +1,6 @@
 <body>
 
-  <h2>Hi <%= @user.username %>, edit <%= @recipe.name %>:</h2>
+  <h2>Edit "<%= @recipe_name %>":</h2>
 
   <br><br>
 
@@ -8,37 +8,39 @@
   <form action="/recipes/<%= @recipe.id %>" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
 
-    <label><b>Update name: </b></label>
-    <input id="new_recipe" type="text" name="recipe[name]" placeholder="<%=@recipe.name%>">
+    <label><b>Update recipe name: </b></label>
+    <input id="new_recipe" type="text" name="recipe[name]" placeholder="<%= @recipe_name %>">
 
     <br><br>
 
-    <label><b>Update ingredient: </b></label>
-    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="<%=@ingredient.name%>">
-
-    <label><b>Edit quantity: </b></label>
-    <input id="new_quantity" type="text" name="recipe_ingredient[quantity]" placeholder="<%=@recipe_ingredient.quantity%>">
-
-    <br><br>
-
-    <p>Previous description: "<%= @recipe.content %>"</p>
+    <p>Previous recipe description: "<%= @recipe.content %>"</p>
     <label><b>Update description: </b></label>
     <input id="new_content" type="text" name="recipe[content]" placeholder="Description:">
 
     <br><br>
-
 
     <input type="submit" value="update">
   </form>
 
   <br><br>
 
-  <p>Don't like what you see?</p>
-  <p>Delete recipe: <b><%=@recipe.name%></b></p>
+  <p><a href="/recipes/<%= @recipe.id %>/add">Add ingredients</a></p>
+
+  <p>OR</p>
+
+  </p><a href="/recipes/<%= @recipe.id %>/edit/all">Update ingredients</a></p>
+
+  <br><br>
+
+  <p>Delete recipe: <b><%= @recipe_name %></b></p>
 
   <form action="/recipes/<%= @recipe.id %>/delete" method="POST">
     <input type="hidden" id="hidden" name="_method" value="delete">
 
     <input type="submit" value="delete">
   </form>
+
+  <br><br>
+
+</p>Back to <a href="/recipes/<%= @recipe.id %>">Recipe</a></p>
 </body>

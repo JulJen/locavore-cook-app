@@ -4,16 +4,18 @@
   <h2>All Recipes by <%= @user.username %>: </h2>
 
   <% if @user.recipes.length == 0 %>
-    <p>You don't have any recipes yet.</p>
+    <p>Doesn't look like you have any recipes yet!</p>
   <% else %>
     <% @user.recipes.each do |recipe| %>
-      <% if recipe.user_id == @user.id %>
-        <ul><li><a href="/recipes/<%= recipe.id %>"><%= recipe.name %></li></ul>
-      <% else %>
-        <p>Doesn't look like you have any recipes yet!</p>
+      <% if recipe.user_id == @user.id && !recipe.name.blank? %>
+        <ul><li><a href="/recipes/<%= recipe.id %>"><%= recipe.name.titleize %></a></li></ul>
+      <% elsif recipe.name.blank? %>
+        <ul><li>Missing recipe name - <a href="/recipes/<%= recipe.id %>">edit here</a></li></ul>
       <% end %>
     <% end %>
   <% end %>
+
+  <br><br>
 
   <p>Create a <a href="/new">new recipe</a>!</p>
 
