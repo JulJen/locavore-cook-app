@@ -1,21 +1,16 @@
 <body>
   <h2>Recipe: <%= @recipe_name %></h2>
 
-  <h3>Edit Ingredients:</h2>
+  <h3>Edit Ingredients or <a href="/recipes/<%= @recipe.id %>/add">Add ingredients</a></h2>
 
   <% if !@recipe.recipe_ingredients.empty? %>
     <% @recipe.recipe_ingredients.each do |ingredient| %>
-      <ul><li><a href="/ingredients/<%= ingredient.id %>/edit"><%= ingredient.quantity %> - <%= ingredient.name.titleize %></a></li></ul>
+      <ul><li><a href="/ingredients/<%= ingredient.recipe_id %>/edit"><%= ingredient.quantity %> - <%= ingredient.name.titleize %></a></li></ul>
     <% end %>
   <% else %>
     <p> Oops <%= @user.username %>, you don't have ingredients.</p>
   <% end %>
-  <p><a href="/recipes/<%= @recipe.id %>/add">Add ingredients</a></p>
-
-
 
   <br><br>
-
   </p>Back to <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
-  <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
 </body>

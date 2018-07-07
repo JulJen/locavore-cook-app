@@ -2,7 +2,6 @@
   <h3>Add ingredients to: "<%= @recipe.name %>"</h3>
 
   <form action="/recipes/<%= @recipe.id %>" method ="POST">
-
     <% if !@recipe.recipe_ingredients.empty? %>
       <p>Choose existing ingredient: </p>
       <% @recipe.recipe_ingredients.each do |ingredient| %>
@@ -28,6 +27,5 @@
 
   <br><br>
 
-  </p><a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
-  <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
+</p>Back to <a href="/recipes/<%= @recipe.id %>/edit">Edit Recipe</a></p>
 </body>

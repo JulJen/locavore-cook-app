@@ -1,5 +1,5 @@
 <body>
-  <h2>Ingredient: <%= @ingredient_name %></h2>
+  <h2>Ingredient: <%= @ingredient_name.titleize %></h2>
 
   <br><br>
 
@@ -7,7 +7,7 @@
     <input type="hidden" id="hidden" name="_method" value="patch">
 
     <label><b>Update ingredient: </b></label>
-    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="<%= @ingredient_name %>">
+    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="<%= @ingredient_name.titleize %>">
 
     <label><b>Edit quantity: </b></label>
     <input id="new_quantity" type="text" name="recipe_ingredient[quantity]" placeholder="<%= @ingredient_quantity %>">
