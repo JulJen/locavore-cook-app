@@ -22,6 +22,7 @@ class UsersController < ApplicationController
 #returning user log-in
   get '/login' do
     if logged_in?
+      @user = User.find(session[:user_id])
       redirect '/show'
     else
       erb :'users/login', default_layout
@@ -29,10 +30,9 @@ class UsersController < ApplicationController
   end
 
   post '/login' do
-
     @user = User.find_by(:username => params[:username])
     if !log_in_empty?
-      if @user == User.authenticate(params[:password])
+      if @user && @user.authenticate(params[:password])
         session[:user_id] = @user.id
         redirect '/show'
       end
@@ -100,6 +100,8 @@ class UsersController < ApplicationController
     @user = User.find_by_slug(params[:slug])
     @user = User.find(session[:user_id])
     @recipe = Recipe.find_by_id(params[:id])
+
+    @recipes = Recipe.all
     erb :'users/show_user', default_layout
   end
 

@@ -8,7 +8,7 @@ class IngredientsController < ApplicationController
 
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
-      
+
       erb :'/ingredients/show_recipe_ingredients', default_layout
     else
       redirect '/login'
@@ -16,12 +16,10 @@ class IngredientsController < ApplicationController
   end
 
   get '/ingredients/:id/edit' do
-  # get '/recipes/:id/edit/' do
-binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
-      # @recipe = Recipe.find_by(params[:id])
-      @recipe = Recipe.find_by_id(params[:id])
+      @recipe = Recipe.find_by(params[:id])
+      # @recipe = Recipe.find_by_id(params[:id])
 
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
@@ -42,23 +40,21 @@ binding.pry
   patch '/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
-      # @recipe = Recipe.find_by(params[:id])
-      @recipe = Recipe.find_by_id(params[:id])
+      @recipe = Recipe.find_by(params[:id])
+      # @recipe = Recipe.find_by_id(params[:id])
 
       @ingredient = Ingredient.find_by_id(params[:id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
-      if !params[:ingredient][:name].empty?
+      if !params[:ingredient][:name].empty? && params[:recipe_ingredient][:quantity].empty?
         @recipe_ingredient.update(name: params[:ingredient][:name])
         @ingredient.update(name: params[:ingredient][:name])
-      elsif !params[:recipe_ingredient][:quantity].empty?
-        @recipe_ingredient = RecipeIngredient.update(quantity: params[:recipe_ingredient][:quantity])
+      elsif !params[:recipe_ingredient][:quantity].empty? && params[:ingredient][:name].empty?
+        @recipe_ingredient.update(quantity: params[:recipe_ingredient][:quantity])
       elsif !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
-        @ingredient = Ingredient.update(name: params[:ingredient][:name])
-        @recipe.recipe_ingredients = RecipeIngredient.update(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity], name:params[:recipe_ingredient][:name])
+        @recipe_ingredient.update(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
+        @ingredient.update(name: params[:ingredient][:name])
       end
-      # @recipe_ingredient.save
-      # @ingredient.save
-      redirect "/recipes/#{@recipe.id}"
+      redirect "/recipes/#{@recipe.id}/edit/all"
     else
       redirect '/login'
     end
@@ -74,6 +70,7 @@ binding.pry
       redirect '/login'
     end
   end
+
 
   post '/recipes/:id' do # see ingredients_controller for get '/recipes/:id/add'
     if logged_in?
@@ -122,7 +119,7 @@ binding.pry
         @recipe.save
       end
 
-      redirect "recipes/:id/edit/all"
+      redirect "/recipes/#{@recipe.id}/edit/all"
     else
       redirect "/login"
     end

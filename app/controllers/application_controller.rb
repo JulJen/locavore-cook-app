@@ -38,6 +38,8 @@ class ApplicationController < Sinatra::Base
         {:layout => :'/layouts/recipe'}
       elsif request.path_info.start_with?('/ingredients')
         {:layout => :'/layouts/ingredient'}
+      elsif request.path_info.start_with?('/community')
+        {:layout => :'/layouts/locavore_recipes'}
       else
         {:layout => :'layouts/user'}
       end
@@ -122,6 +124,10 @@ class ApplicationController < Sinatra::Base
       @user.recipes.each do |recipe|
         @user_recipe = "#{recipe.name.titleize}"
       end
+    end
+
+    def sort_column
+      params[:sort] ? params[:sort].to_sym : :user_id
     end
 
 #     def recipe_pass?
