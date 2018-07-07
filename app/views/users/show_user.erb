@@ -1,4 +1,10 @@
 <body>
+  <% if !@recipes.empty? %>
+  <h3>See Posts by <a href="/community/locavore_recipes">Locavore Community</a></h3>
+    <h3>Total posts: <%= @recipes.size %></h3>
+  <% end %>
+
+  <br><br>
 
   <% if @user.recipes.length == 0 %>
     <p>Doesn't look like you have any recipes yet!</p>
@@ -7,5 +13,4 @@
     <p>OR</p>
   <% end %>
   <p>Create a <a href="/new">New Recipe</a></p>
-
 </body>
