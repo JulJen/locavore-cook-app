@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_slug(slug)
-    User.all.find{|username| username.slug == slug}
+    User.all.find { |name| name.slug == slug }
   end
 
 end
