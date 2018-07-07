@@ -22,6 +22,11 @@ class RecipesController  < ApplicationController
   get '/new' do
     if logged_in?
       @user = User.find(session[:user_id])
+      @recipe = Recipe.find_by(params[:id])
+
+      @ingredients = Ingredient.all
+      @recipe_ingredients = RecipeIngredient.all
+
       erb :'recipes/new_recipe', default_layout
     else
       redirect '/login'
@@ -30,15 +35,8 @@ class RecipesController  < ApplicationController
 
 
   get '/recipes' do
-binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by(params[:id])
-
-      @ingredient = Ingredient.find_by_id(params[:id])
-      @recipe_ingredients = RecipeIngredient.find_by_id(params[:id])
-
-      # @recipe_user_id = Recipe.find_by(params[:id])
       erb :'recipes/all_recipes'
     else
       redirect '/login'
@@ -49,38 +47,41 @@ binding.pry
   post '/recipes' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if !recipe_fields_empty?
-        @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content], user_id: current_user.id)
-
-        @ingredient = Ingredient.create(name: params[:ingredient][:name])
-
-        @recipe.ingredients << Ingredient.create(name: params[:ingredient][:name],user_id: current_user.id, recipe_id: current_recipe)
-
-        @recipe_ingredients = Ingredient.create(name: params[:ingredient][:name])
-
-        @recipe.recipe_ingredients << RecipeIngredient.create(params[:recipe_ingredient][:quantity], user_id: current_user.id, recipe_id: current_recipe, ingredient_id: current_ingred)
-
-        redirect "/recipes/#{@recipe.id}"
-      else
-        redirect '/new'
+      if !params[:recipe][:name].empty? && !params[:recipe][:content].empty?
+        @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content])
       end
-    else
-      redirect '/recipes/failure'
+      if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
+        @ingredient = Ingredient.create(name: params[:ingredient][:name])
+        @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
+      end
+      @recipe.recipe_ingredients << @recipe_ingredient
+      @ingredient.recipe_ingredients << @recipe_ingredient
+      @user.recipes << @recipe
+      # @recipe.save
+      redirect "/recipes/#{@recipe.id}"
+      else
+        redirect 'login'
+      end
     end
-  end
-
 
   get '/recipes/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if @user.id == current_user.id
-        @recipe = Recipe.find_by_id(params[:id])
-        @recipe.ingredient = Ingredient.find_by_id(params[:id])
-        @recipe.recipe_ingredient = RecipeIngredient.find_by(params[:id])
-        erb :'/recipes/show_recipe', default_layout
-      else
-      redirect 'users/error'
-    end
+      @recipe = Recipe.find_by_id(params[:id])
+      @recipe_name = @recipe.name.titleize
+
+      @recipe.recipe_ingredients.each do |i|
+        @recipe_ingred = i.name
+        @recipe_quantity = i.quantity
+      end
+      # @recipe.ingredients.each do |i|
+      # @recipe_ingred = i.name
+      # end
+      #
+      # @recipe.recipe_ingredients.each do |i|
+      # @recipe_quantity = i.quantity
+      # end
+      erb :'/recipes/show_recipe', default_layout
     else
       redirect '/login'
     end
@@ -91,8 +92,17 @@ binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
-      @ingredient = Ingredient.find_by_id(params[:id])
-      @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
+
+      @recipe_name = @recipe.name.titleize
+
+      @recipe.recipe_ingredients.each do |i|
+        @recipe_quantity = "#{i.quantity}"
+      end
+
+      @recipe.ingredients.each do |i|
+        @recipe_ingred = "#{i.name.titleize}"
+      end
+
       erb :'/recipes/edit_recipe', default_layout
     else
       redirect '/login'
@@ -100,17 +110,13 @@ binding.pry
   end
 
   patch '/recipes/:id' do
-    if logged_in? && !recipe_fields_empty?
+    if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
-      @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
 
       if !params[:recipe][:name].empty?
         @recipe.update(name: params[:recipe][:name])
-      elsif !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
-        @ingredient = Ingredient.update(name: params[:ingredient][:name])
-        @recipe.recipe_ingredients = RecipeIngredient.update(quantity: params[:recipe_ingredient][:quantity])
       elsif !params[:recipe][:content].empty?
         @recipe.update(content: params[:recipe][:content])
       end
@@ -120,42 +126,24 @@ binding.pry
       redirect '/login'
     end
   end
+    #   if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
+    #     @ingredient = Ingredient.create(name: params[:ingredient][:name])
+    #
+    #     @recipe_ingredient = RecipeIngredient.create(quantity: params[:recipe_ingredient][:quantity])
+    #   end
+    #     @ingredient.recipe_ingredients << @recipe_ingredient
+    #
+    #     # @recipe.ingredients << @ingredient
+    #
+    #     @recipe.recipe_ingredients << @recipe_ingredient
+    #
+    #     @recipe.save
+    #     redirect "/recipes/#{@recipe.id}"
+    #   else
+    #     redirect '/login'
+    #   end
+    # end
 
-  get '/recipes/:id/add' do
-    if logged_in?
-      @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by_id(params[:id])
-      @ingredient = Ingredient.find_by_id(params[:id])
-      @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
-
-      erb :'/recipes/new_ingredient', default_layout
-    else
-      redirect '/login'
-    end
-  end
-
-  post '/recipes/:id' do
-    if logged_in? && !recipe_fields_empty?
-      @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by_id(params[:id])
-
-      @ingredient = Ingredient.find_by_id(params[:id])
-      @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
-      if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
-        @ingredient = Ingredient.create(name: params[:ingredient][:name])
-
-        # @recipe << Ingredient.create(name: params[:ingredient][:name])
-        @recipe.recipe_ingredients << RecipeIngredient.create(quantity: params[:recipe_ingredient][:quantity])
-
-        @recipe.save
-        redirect "/recipes/#{@recipe.id}"
-      else
-        redirect '/recipes/failure'
-      end
-    else
-      redirect '/login'
-    end
-  end
 
   get '/recipes/:id/delete' do
     if logged_in?
@@ -179,4 +167,5 @@ binding.pry
       redirect "/login"
     end
   end
+
 end

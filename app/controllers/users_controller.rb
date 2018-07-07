@@ -29,23 +29,20 @@ class UsersController < ApplicationController
   end
 
   post '/login' do
-    # if user && user.authenticate(params[:password])
-    # if user_passfail?
-    #   session[:user_id] = user.id
-    #   redirect '/show'
-    # end
-    # user = User.find_by(:username => params[:username])
-    # if user && user.authenticate(params[:password])
-    if user_passfail?
-      session[:user_id] = user.id
-      redirect '/show'
-    elsif
-      user_fields_empty?
-      redirect '/failure'
-    elsif !user_passfail?
-      redirect '/failure'
+
+    @user = User.find_by(:username => params[:username])
+    if !log_in_empty?
+      if @user == User.authenticate(params[:password])
+        session[:user_id] = @user.id
+        redirect '/show'
+      end
+    elsif !log_in_empty? && @current_user == nil
+        redirect '/failure'
+    else
+      redirect '/incomplete'
     end
   end
+
 
 #new user sign-up
   get '/signup' do
@@ -59,12 +56,12 @@ class UsersController < ApplicationController
   post '/signup' do
     if logged_in?
       redirect '/show'
-    elsif !user_fields_empty?
+    elsif !logged_in? && !user_fields_empty?
       @user = User.create(:fname => params[:fname], :lname => params[:lname], :email => params[:email], :username => params[:username], :password => params[:password])
       @user.save
       session[:user_id] = @user.id
       redirect '/more_info'
-    elsif user_fields_empty?
+    elsif !logged_in? && user_fields_empty?
       redirect '/incomplete'
     else
       redirect '/signup'
@@ -72,18 +69,19 @@ class UsersController < ApplicationController
   end
 
   get '/more_info' do
-    if logged_in?
-      @user = User.find(session[:user_id])
+
+    @user = User.find(session[:user_id])
+    if current_user && logged_in?
       erb :'users/more_info'
     else
-      redirect '/error'
+      redirect '/login'
     end
   end
 
   post '/more_info' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if !user_more_info_empty?
+      if !more_info_empty?
         @user.update(state: params[:state], bio: params[:bio])
       elsif !params[:state].empty?
         @user.update(state: params[:state])
@@ -92,11 +90,6 @@ class UsersController < ApplicationController
       end
       @user.save
       redirect '/show'
-      # if !user_more_info_empty?
-      #   # @user = User.create(:state => params[:state], :bio => params[:bio])
-      #   @user.update(state: params[:state], bio: params[:bio])
-      #   @user.save
-      #   redirect '/show'
     else
       redirect '/failure'
     end
@@ -105,18 +98,14 @@ class UsersController < ApplicationController
 #user account info
   get '/users/:slug' do
     @user = User.find_by_slug(params[:slug])
-    erb :'users/show_user'
+    @user = User.find(session[:user_id])
+    @recipe = Recipe.find_by_id(params[:id])
+    erb :'users/show_user', default_layout
   end
 
   get '/show' do
     if logged_in?
-      @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by_id(params[:id])
-      @recipes = Recipe.all
-      # if @recipe.name == nil
-      erb :'users/show_user', default_layout
-    else
-      redirect '/failure'
+      redirect '/users/:slug'
     end
   end
 
@@ -141,7 +130,7 @@ class UsersController < ApplicationController
   patch '/show' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if !user_more_info_empty?
+      if !more_info_empty?
         @user.update(state: params[:state], bio: params[:bio])
       elsif !params[:state].empty?
         @user.update(state: params[:state])
@@ -158,8 +147,8 @@ class UsersController < ApplicationController
 #user log-out
   get '/logout' do
     if logged_in?
-      session.clear
       @current_user = nil
+      session.clear
       redirect '/'
     else
       redirect '/failure'

@@ -36,6 +36,8 @@ class ApplicationController < Sinatra::Base
         {:layout => :'/layouts/error'}
       elsif request.path_info.start_with?('/recipe', '/recipes')
         {:layout => :'/layouts/recipe'}
+      elsif request.path_info.start_with?('/ingredients')
+        {:layout => :'/layouts/ingredient'}
       else
         {:layout => :'layouts/user'}
       end
@@ -65,52 +67,66 @@ class ApplicationController < Sinatra::Base
     def name
       if logged_in?
         @user = User.find(session[:user_id])
-        name = @user.username
+        @name = @user.username
       end
     end
 
-
 #users_controller  and recipes_controller
     def logged_in?
-      session[:user_id]
-      # !!session[:user_id]
+      if current_user
+        !!session[:user_id]
+      end
+      # !@current_user.blank?
+      # !!session[:user_id] == current_user.id
     end
 
     def current_user
-      # when we log out, we would want to execute:
-      # @current_user = nil
       @current_user ||= User.find(session[:user_id]) if session[:user_id]
     end
 
     def current_recipe
-      @current_recipe ||= Recipe.find_by(params[:id]) if Recipe.last
+      @current_recipe ||= Recipe.find_by(params[:id]) if session[:user_id] == current_user.id
     end
 
     def current_ingred
-      @current_ingred ||= Ingredient.find_by(params[:id]) if Ingredient.last
+      @current_ingred ||= Ingredient.find_by(params[:id]) if session[:user_id]
+    end
+
+    def titleize(str)
+      str.split(/ |\_/).map(&:capitalize).join(" ")
     end
 
 #users_controller
-    def user_passfail?
-      true if User.find_by(:username => params[:username]) && user.authenticate(params[:password_digest]) rescue false
-    end
-
+#     def user_passfail?
+#       true if User.find_by(:username => params[:username]) && user.authenticate(params[:password_digest]) rescue false
+#     end
+#
     def user_fields_empty?
       true if params[:fname] == "" || params[:lname] == "" || params[:username] == "" || params[:email] == "" || params[:password] == "" rescue false
     end
 
-    def user_more_info_empty?
-      true if params[:state] == "" || params[:bio] == "" rescue false
+    def more_info_empty?
+      params[:state] == "" && params[:bio] == ""
+    end
+
+    def log_in_empty?
+      true if params[:username] == "" &&  params[:password] == "" rescue false
     end
 
 #RecipesController
     def recipe_fields_empty?
-      true if params[:recipe][:name].empty? && params[:recipe][:content].empty? && params[:ingredient][:name].empty? && params[:recipe_ingredient][:quantity].empty?  rescue false
+      true if params[:recipe][:name] == "" && params[:recipe][:content] == "" && params[:ingredient][:name] == "" && params[:recipe_ingredient][:quantity] == "" rescue false
     end
 
-    def recipe_pass?
-      true if @recipe && current_user.id == @recipe.user_id rescue false
+    def user_recipe
+      @user.recipes.each do |recipe|
+        @user_recipe = "#{recipe.name.titleize}"
+      end
     end
+
+#     def recipe_pass?
+#       true if @recipe && current_user.id == @recipe.user_id rescue false
+#     end
 
   end
 end
