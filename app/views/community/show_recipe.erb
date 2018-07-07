@@ -1,0 +1,25 @@
+<body>
+  <% if !@recipes.empty? %>
+    <% @recipes.each do |recipe| %>
+      <% if !recipe.name.empty? %>
+         <% recipe.name %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <h3>Recipe:</h3>
+
+  <br><br>
+
+  <h3>Ingredients:</h3>
+
+  <br><br>
+
+
+  <h3>Directions:</h3>
+
+  <br><br>
+
+  <p>Back to <a href="/community/locavore_recipes">Locavore Recipes</a></p>
+
+</body>

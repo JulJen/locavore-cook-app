@@ -1,0 +1,18 @@
+<body>
+
+  <h3>Search by <a href="/community/locavore_ingredients">Ingredient</a></h3>
+
+  <br><br>
+  
+  <% if !@recipes.empty? %>
+    <h3>Posts by Locavore Community: </h3>
+    <% @recipes.each do |recipe| %>
+      <% if !recipe.content.empty? %>
+        <ul><li><a href="/community/locavore_recipes/<%= recipe.id %>"><%= recipe.name.titleize %></a> - "<%= recipe.content.titleize %>"</li></ul>
+      <% else %>
+        <ul><li><a href="/community/locavore_recipes/<%= recipe.id %>"><%= recipe.name.titleize %></a></li></ul>
+      <% end %>
+    <% end %>
+  <% end %>
+
+</body>
