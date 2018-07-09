@@ -1,13 +1,13 @@
 class CreateUsers < ActiveRecord::Migration[5.2]
   def change
     create_table :users do |t|
-      t.string :fname
-      t.string :lname
-      t.string :username
+      t.string :fname, limit: 20
+      t.string :lname, limit: 20
+      t.string :username, limit: 10
       t.string :email
-      t.string :password_digest
-      t.string :state
-      t.string :bio
+      t.string :password_digest, limit: 10
+      t.string :state, limit: 60
+      t.string :bio, limit: 20
     end
   end
 end
