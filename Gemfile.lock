@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/stympy/faker.git
+  revision: b94eda03e8bd2af3ba0a740fbac83170ea1967f4
+  branch: master
+  specs:
+    faker (1.8.7)
+      i18n (>= 0.7)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -100,6 +108,7 @@ DEPENDENCIES
   activemodel
   activerecord
   bcrypt
+  faker!
   pry
   rack
   rack-flash3

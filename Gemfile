@@ -15,10 +15,12 @@ gem 'rspec'
 gem 'rack'
 gem 'rack-flash3'
 gem "activemodel", require: "active_model"
+gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
+
 
 group :development do
 		gem 'shotgun'
 		gem 'pry'
 		gem 'tux'
 		gem 'sqlite3'
-	end
+end
