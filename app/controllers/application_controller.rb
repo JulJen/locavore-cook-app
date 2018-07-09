@@ -21,15 +21,12 @@ class ApplicationController < Sinatra::Base
     session.clear
     erb :'application/root', default_layout
   end
-    # , :layout => :layout
-    # , locals: {now: Time.now}
-  # end
 
 
   helpers do
+
 #layouts
     def default_layout
-      # if request.path.start_with?('/failure')
       if request.path_info.start_with?('/main', '/signup', '/login')
         {:layout => :'/layouts/signin'}
       elsif request.path_info.start_with?('/failure', '/incomplete')
@@ -78,8 +75,6 @@ class ApplicationController < Sinatra::Base
       if current_user
         !!session[:user_id]
       end
-      # !@current_user.blank?
-      # !!session[:user_id] == current_user.id
     end
 
     def current_user
@@ -99,10 +94,6 @@ class ApplicationController < Sinatra::Base
     end
 
 #users_controller
-#     def user_passfail?
-#       true if User.find_by(:username => params[:username]) && user.authenticate(params[:password_digest]) rescue false
-#     end
-#
     def user_fields_empty?
       true if params[:fname] == "" || params[:lname] == "" || params[:username] == "" || params[:email] == "" || params[:password] == "" rescue false
     end
@@ -129,10 +120,6 @@ class ApplicationController < Sinatra::Base
     def sort_column
       params[:sort] ? params[:sort].to_sym : :user_id
     end
-
-#     def recipe_pass?
-#       true if @recipe && current_user.id == @recipe.user_id rescue false
-#     end
 
   end
 end

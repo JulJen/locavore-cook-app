@@ -39,26 +39,30 @@ class RecipesController  < ApplicationController
   post '/recipes' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if !params[:recipe][:name].empty? && !params[:recipe][:content].empty?
-        @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content])
+binding.pry
+      if !params[:recipe][:name].empty? && !params[:recipe][:content].empty? && !params[:recipe][:directions].empty?
+        @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content], directions: params[:recipe][:directions])
       else
         redirect '/failure'
       end
+
       if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
         @ingredient = Ingredient.create(name: params[:ingredient][:name])
         @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
       else
         redirect '/failure'
       end
+
       @recipe.recipe_ingredients << @recipe_ingredient
       @ingredient.recipe_ingredients << @recipe_ingredient
       @user.recipes << @recipe
-      # @recipe.save
+
       redirect "/recipes/#{@recipe.id}"
       else
         redirect 'login'
       end
     end
+
 
   get '/recipes/:id' do
     if logged_in?
@@ -70,11 +74,19 @@ class RecipesController  < ApplicationController
         @recipe_ingred = i.name
         @recipe_quantity = i.quantity
       end
+
+      def recipe_time
+        @recipe.each do |i|
+          @recipe_time = i.created_at
+        end
+      end
+
       erb :'/recipes/show_recipe', default_layout
     else
       redirect '/login'
     end
   end
+
 
   get '/recipes/:id/edit' do
     if logged_in?
@@ -106,6 +118,8 @@ class RecipesController  < ApplicationController
         @recipe.update(name: params[:recipe][:name])
       elsif !params[:recipe][:content].empty?
         @recipe.update(content: params[:recipe][:content])
+      elsif !params[:recipe][:directions].empty?
+        @recipe.update(directions: params[:recipe][:directions])
       end
       @recipe.save
       redirect "/recipes/#{@recipe.id}"
@@ -124,6 +138,7 @@ class RecipesController  < ApplicationController
       redirect '/login'
     end
   end
+
 
   delete '/recipes/:id/delete' do
     if logged_in?

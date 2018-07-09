@@ -15,11 +15,11 @@ class IngredientsController < ApplicationController
     end
   end
 
+
   get '/ingredients/:id/edit' do
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by(params[:id])
-      # @recipe = Recipe.find_by_id(params[:id])
 
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
@@ -29,19 +29,18 @@ class IngredientsController < ApplicationController
         @ingredient_quantity = i.quantity
         @ingredient_id = i.id
       end
-      # @ingredient_name = @recipe_ingredient.name.titleize
-      # @ingredient_quantity = @recipe_ingredient.quantity
+
       erb :'/ingredients/edit_ingredient', default_layout
     else
       redirect '/login'
     end
   end
 
+
   patch '/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by(params[:id])
-      # @recipe = Recipe.find_by_id(params[:id])
 
       @ingredient = Ingredient.find_by_id(params[:id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
@@ -73,16 +72,17 @@ class IngredientsController < ApplicationController
 
 
   post '/recipes/:id' do # see ingredients_controller for get '/recipes/:id/add'
+binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
-      if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
 
+      if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
         @ingredient = Ingredient.create(name: params[:ingredient][:name])
         @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
         @recipe.recipe_ingredients << @recipe_ingredient
         @ingredient.recipe_ingredients << @recipe_ingredient
-        # @recipe.save
+
         redirect "/recipes/#{@recipe.id}"
       else
         redirect '/recipes/:id/add'
