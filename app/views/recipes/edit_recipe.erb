@@ -13,22 +13,28 @@
 
     <br><br>
 
-    <p>Previous recipe description: "<%= @recipe.content %>"</p>
-    <label><b>Update description: </b></label>
-    <input id="new_content" type="text" name="recipe[content]" placeholder="Description:">
+    <p>Previous recipe headline: "<%= @recipe.content %>"</p>
+    <label><b>Update headline: </b></label>
+    <input id="new_content" type="text" name="recipe[content]" placeholder="Recipe Headline:">
+
+    <br><br>
+
+    <p>Previous directions: "<%= @recipe.directions %>"</p>
+    <label><b>Update directions: </b></label>
+    <input id="new_directions" type="text" name="recipe[directions]" placeholder="Directions:">
 
     <br><br>
 
     <input type="submit" value="update">
   </form>
 
+  <p>OR</p>
+
+  <b><a href="/recipes/<%= @recipe.id %>/edit/all">Update ingredients</a></b>
+
   <br><br>
 
   <p>OR</p>
-
-  </p><a href="/recipes/<%= @recipe.id %>/edit/all">Update ingredients</a></p>
-
-  <br><br>
 
   <p>Delete recipe: <b><%= @recipe_name %></b></p>
 

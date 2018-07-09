@@ -22,9 +22,9 @@
     <br><br>
 
     <% if request.path_info.start_with?('/users') %>
-      <p><a href="/account">Account</a> <a href="/logout">Log Out</a></p>
+      <p><a href="/account">Account</a> // <a href="/logout">Log Out</a></p>
     <% else %>
-      <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
+      <p><a href="/show">Main</a> // <a href="/logout">Log Out</a></p>
     <% end %>
   </body>
 </html>
