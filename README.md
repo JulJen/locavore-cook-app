@@ -14,7 +14,7 @@ Create your user account and have fun! End server with ctrl + c.
 
 ## Usage
 
-At the homepage, create an account and log in. As a user, you can view all locavore recipes from the Recipe Library tab by season, location, and main ingredients. You can also create new recipes, edit, and/or remove your own posts. You can view your own newly created recipes from My Recipes tab.
+At the homepage, create an account and log in. As a user, you can also create new recipes, edit, and/or remove your own posts.
 
 ## Contributing
 
