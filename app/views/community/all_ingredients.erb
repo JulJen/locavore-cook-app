@@ -1,6 +1,6 @@
 <body>
 
-  <h3>Seach by ingredient: </h3>
+  <h3>Ingredients: </h3>
 
   <% @recipe_ingredients.each do |ingred| %>
     <ul><li><a href="/community/ingredients/<%= ingred.id %>"><%= ingred.name.titleize %></a></li></ul>
