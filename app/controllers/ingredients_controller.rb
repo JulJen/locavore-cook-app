@@ -72,7 +72,6 @@ class IngredientsController < ApplicationController
 
 
   post '/recipes/:id' do # see ingredients_controller for get '/recipes/:id/add'
-binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])

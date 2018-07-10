@@ -39,7 +39,6 @@ class RecipesController  < ApplicationController
   post '/recipes' do
     if logged_in?
       @user = User.find(session[:user_id])
-binding.pry
       if !params[:recipe][:name].empty? && !params[:recipe][:content].empty? && !params[:recipe][:directions].empty?
         @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content], directions: params[:recipe][:directions])
       else
@@ -169,7 +168,7 @@ binding.pry
     end
   end
 
-  get '/community/locavore_recipes/:id' do
+  get '/community/locavore_recipes/:user_id/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
       @users = User.all
