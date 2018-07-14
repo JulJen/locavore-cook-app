@@ -5,26 +5,36 @@
     <h3> Oops <%= @user.username %>, missing recipe name! </h3>
   <% end %>
 
-  <h3>"<%= @recipe.content.capitalize %>"</h3>
+  <% if !@recipe.content.blank? %>
+    <h3>Recipe Headline:</h3><p><%= @recipe.content.capitalize %></p>
+  <% else %>
+    <p> Oops <%= @user.username %>, missing headline! <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
+  <% end %>
+
 
   <br><br>
 
   <h3>Ingredients: </h3>
-  <% if !@recipe.recipe_ingredients.empty? %>
-    <% @recipe.recipe_ingredients.each do |i| %>
-      <ul><li><%= i.quantity %>, <%= i.name %></li></ul>
+
+  <% if !@recipe.recipe_ingredients.blank? %>
+    <% @recipe.recipe_ingredients.each do |ingredient| %>
+      <ul><li><a href="/ingredients/<%= ingredient.id %>/edit"><%= ingredient.quantity %> - <%= ingredient.name.titleize %></a></li></ul>
     <% end %>
   <% else %>
-    <p> Oops <%= @user.username %>, you don't have ingredients. <a href="/recipes/<%= @recipe.id %>/add">Add ingredients</a></p>
+    <p> Oops <%= @user.username %>, you don't have ingredients. <a href="/recipes/<%= @recipe.id %>/ingredients/new">Add ingredients</a></p>
   <% end %>
 
-  <h3>Directions:</h3>
-  <p>"<%= @recipe.directions.capitalize %>"</p>
+  <h3>Directions: </h3>
+  <% if !@recipe.directions.blank? %>
+    <p><%= @recipe.directions.capitalize %></p>
+  <% else %>
+    <p> Oops <%= @user.username %>, missing directions! <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
+  <% end %>
 
   <br><br>
 
   <br><br>
 
-  <p><a href="/recipes">All Recipes</a> // <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p></p>
+  <p>Back to <a href="/recipes">All Recipes</a> // <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p></p>
 
 </body>

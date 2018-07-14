@@ -1,9 +1,9 @@
 <body>
   <h3>Add ingredients to: "<%= @recipe.name %>"</h3>
-  
+
   <br></br>
 
-  <form action="/recipes/<%= @recipe.id %>" method ="POST">
+  <form action="/ingredients/<%= @recipe.id %>" method ="POST">
 
     <label>Add new ingredient:</label>
     <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredient:">
@@ -20,5 +20,5 @@
 
   <br><br>
 
-</p>Back to <a href="/recipes/<%= @recipe.id %>/edit">Edit Recipe</a></p>
+</p>Back to <a href="/recipes">All Recipes</a></p>
 </body>

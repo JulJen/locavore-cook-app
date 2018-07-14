@@ -8,6 +8,8 @@ class CreateUsers < ActiveRecord::Migration[5.2]
       t.string :password_digest, limit: 10
       t.string :state, limit: 60
       t.string :bio, limit: 20
+      t.timestamp :created_at, null: false
+      t.timestamp :updated_at, null: false
     end
   end
 end

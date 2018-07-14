@@ -1,6 +1,6 @@
 class RecipesController  < ApplicationController
 
-#recipe error essages
+#recipe error messages
   get '/recipes/failure' do
     if logged_in?
       @user = User.find(session[:user_id])
@@ -39,28 +39,22 @@ class RecipesController  < ApplicationController
   post '/recipes' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if !params[:recipe][:name].empty? && !params[:recipe][:content].empty? && !params[:recipe][:directions].empty?
+      if !params[:recipe][:name].empty? && !params[:recipe][:content].empty? && !params[:recipe][:directions].empty? && !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
         @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content], directions: params[:recipe][:directions])
-      else
-        redirect '/failure'
-      end
-
-      if !params[:ingredient][:name].empty? && !params[:recipe_ingredient][:quantity].empty?
         @ingredient = Ingredient.create(name: params[:ingredient][:name])
         @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
+        @recipe.recipe_ingredients << @recipe_ingredient
+        @ingredient.recipe_ingredients << @recipe_ingredient
+        @user.recipes << @recipe
+        @recipe.save
+        redirect "/recipes/#{@recipe.id}"
       else
-        redirect '/failure'
+        redirect '/recipes/failure'
       end
-
-      @recipe.recipe_ingredients << @recipe_ingredient
-      @ingredient.recipe_ingredients << @recipe_ingredient
-      @user.recipes << @recipe
-
-      redirect "/recipes/#{@recipe.id}"
-      else
-        redirect 'login'
-      end
+    else
+      redirect 'login'
     end
+  end
 
 
   get '/recipes/:id' do
@@ -111,15 +105,23 @@ class RecipesController  < ApplicationController
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
-      @ingredient = Ingredient.find_by_id(params[:id])
 
       if !params[:recipe][:name].empty?
         @recipe.update(name: params[:recipe][:name])
-      elsif !params[:recipe][:content].empty?
+      end
+      if !params[:recipe][:content].empty?
         @recipe.update(content: params[:recipe][:content])
-      elsif !params[:recipe][:directions].empty?
+      end
+      if !params[:recipe][:directions].empty?
         @recipe.update(directions: params[:recipe][:directions])
       end
+      # if !params[:recipe][:name].empty? && !params[:recipe][:content].empty?
+      #   @recipe.update(name: params[:recipe][:name], content: params[:recipe][:content])
+      # end
+      # if !params[:recipe][:content].empty? && !params[:recipe][:directions].empty?
+      #   @recipe.update(content: params[:recipe][:content], directions: params[:recipe][:directions])
+      # end
+      #
       @recipe.save
       redirect "/recipes/#{@recipe.id}"
     else
@@ -145,8 +147,8 @@ class RecipesController  < ApplicationController
       @recipe = Recipe.find_by_id(params[:id])
       if @recipe.user_id == current_user.id
         @recipe.delete
-        redirect "/recipes"
       end
+      redirect "/recipes"
     else
       redirect "/login"
     end

@@ -1,16 +1,16 @@
 <body>
-  <h2>Ingredient: <%= @ingredient_name.titleize %></h2>
+  <h2>Ingredient: <%= @recipe_ingredient.name.titleize %></h2>
 
   <br><br>
 
-  <form action="/ingredients/<%= @ingredient_id %>" method="post">
+  <form action="/ingredients/<%= @recipe_ingredient.id %>" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
 
     <label><b>Update ingredient: </b></label>
-    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="<%= @ingredient_name.titleize %>">
+    <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="<%= @recipe_ingredient.name.titleize %>">
 
     <label><b>Edit quantity: </b></label>
-    <input id="new_quantity" type="text" name="recipe_ingredient[quantity]" placeholder="<%= @ingredient_quantity %>">
+    <input id="new_quantity" type="text" name="recipe_ingredient[quantity]" placeholder="<%= @recipe_ingredient.quantity %>">
 
     <br><br>
 
@@ -19,7 +19,9 @@
 
   <p>OR</p>
 
-  <form action="/ingredients/<%= @ingredient_id %>/delete" method="POST">
+  <p>Delete ingredient: <b><%= @recipe_ingredient.name.titleize %></b></p>
+
+  <form action="/ingredients/<%= @recipe_ingredient.id %>/delete" method="POST">
     <input type="hidden" id="hidden" name="_method" value="delete">
 
     <input type="submit" value="delete">
@@ -27,6 +29,5 @@
 
   <br><br>
 
-  </p><a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
-  <p><a href="/show">Main</a> <a href="/logout">Log Out</a></p>
+</p>Back to <a href="/recipes">All Recipes</a></p>
 </body>

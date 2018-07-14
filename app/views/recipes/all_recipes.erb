@@ -8,7 +8,7 @@
   <% else %>
     <% @user.recipes.each do |recipe| %>
       <% if recipe.user_id == @user.id && !recipe.name.blank? %>
-        <ul><li><a href="/recipes/<%= recipe.id %>"><%= recipe.name.titleize %></a></li></ul>
+        <ul><li><b><a href="/recipes/<%= recipe.id %>"><%= recipe.name.titleize %></a></b> - "<%= recipe.content.titleize %>" (Last updated: <%= recipe.updated_at.strftime('%c')%>)</li></ul>
       <% elsif recipe.name.blank? %>
         <ul><li>Missing recipe name - <a href="/recipes/<%= recipe.id %>">edit here</a></li></ul>
       <% end %>

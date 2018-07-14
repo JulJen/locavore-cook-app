@@ -1,13 +1,14 @@
 class IngredientsController < ApplicationController
 
-  get '/recipes/:id/edit/all' do
+  get '/recipes/:id/ingredients' do
       if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
       @recipe_name = @recipe.name.titleize
 
-      @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
-      @ingredient = Ingredient.find_by_id(params[:id])
+      @recipe.recipe_ingredients. each do |i|
+        @ingredient_id = i.id
+      end
 
       erb :'/ingredients/show_recipe_ingredients', default_layout
     else
@@ -19,16 +20,8 @@ class IngredientsController < ApplicationController
   get '/ingredients/:id/edit' do
     if logged_in?
       @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by(params[:id])
-
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
-
-      @recipe.recipe_ingredients.each do |i|
-        @ingredient_name = i.name
-        @ingredient_quantity = i.quantity
-        @ingredient_id = i.id
-      end
 
       erb :'/ingredients/edit_ingredient', default_layout
     else
@@ -40,7 +33,6 @@ class IngredientsController < ApplicationController
   patch '/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by(params[:id])
 
       @ingredient = Ingredient.find_by_id(params[:id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
@@ -53,25 +45,25 @@ class IngredientsController < ApplicationController
         @recipe_ingredient.update(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
         @ingredient.update(name: params[:ingredient][:name])
       end
-      redirect "/recipes/#{@recipe.id}/edit/all"
+      redirect '/recipes'
     else
       redirect '/login'
     end
   end
 
 
-  get '/recipes/:id/add' do # see recipe_controller for post '/recipes/:id'
+  get '/recipes/:id/ingredients/new' do # see recipe_controller for post '/recipes/:id'
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
+
       erb :'/ingredients/new_ingredient', default_layout
     else
       redirect '/login'
     end
   end
 
-
-  post '/recipes/:id' do # see ingredients_controller for get '/recipes/:id/add'
+  post '/ingredients/:id' do # see ingredients_controller for get '/recipes/:id/add'
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
@@ -81,10 +73,9 @@ class IngredientsController < ApplicationController
         @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
         @recipe.recipe_ingredients << @recipe_ingredient
         @ingredient.recipe_ingredients << @recipe_ingredient
-
-        redirect "/recipes/#{@recipe.id}"
+        redirect '/recipes'
       else
-        redirect '/recipes/:id/add'
+        redirect '/recipes/failure'
       end
     else
       redirect '/login'
@@ -92,35 +83,18 @@ class IngredientsController < ApplicationController
   end
 
 
-  delete '/ingredients/:id/delete' do
+  delete '/ingredients/:id/delete' do\
     if logged_in?
       @user = User.find(session[:user_id])
-      @recipe = Recipe.find_by(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
 
-      @recipe.recipe_ingredients.each do |i|
-        @recipe_ingredient_name = i.name
-        @recipe_ingredient_id = i.ingredient_id
+      if !@recipe_ingredient.blank?
+        @recipe_ingredient.delete
       end
-
-      @recipe.ingredients.each do |i|
-        @ingredient_name = i.name
-        @ingredient_id = i.id
-      end
-
-      if @ingredient_id == @recipe_ingredient_id
-        @recipe.recipe_ingredients.map do |i|
-          if @ingredient.id == i.ingredient_id
-            i.delete
-          end
-        end
-        @recipe.save
-      end
-
-      redirect "/recipes/#{@recipe.id}/edit/all"
+      redirect '/recipes'
     else
-      redirect "/login"
+      redirect '/login'
     end
   end
 
