@@ -1,23 +1,25 @@
 <body>
   <h2>Welcome <%= @user.username %>, thanks for signing up to Locavore Kitchen!</h2>
 
-  <h2>Introduce yourself to the community:</h2>
+  <br><br>
+
+  <h3>Introduce yourself to the community:</h3>
 
   <h3>Where are you from? </h3>
 
   <form action="/more_info" method="POST">
-  <b><label>State postal code: </label></b>
-  <input id="new_state" type="text"  name="state" placeholder="ex. NY, NJ, or PA">
+    <b><label for = "state">State postal code: </label></b>
+      <input id="new_state" name="state" type="text" value="" placeholder="ex. NY, NJ, or PA">
 
-  <br><br>
+    <br><br>
 
-  <h3>Share your likes, what makes you a locavore? </h3>
-  <b><label><%= @user.username %> loves: </label></b>
-  <input id="new_bio" type="text"  name="bio" placeholder="<%= @user.username %> loves:">
+    <h3>Share your likes, what makes you a locavore? </h3>
+    <b><label><%= @user.username %> loves: </label></b>
+    <input id="new_bio" name="bio" type="text" value="" placeholder="<%= @user.username %> loves:">
 
-  <br><br>
+    <br><br>
 
-  <input id="More Info" type="submit" value="introduce me!">
+    <input id="More Info" type="submit" value="introduce me!">
   </form>
 
   <br><br>

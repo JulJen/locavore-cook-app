@@ -8,23 +8,25 @@
 
     <% if request.path_info.start_with?('/new') %>
       <h2>Hi <%= name %>, start your recipe here:</h2>
+      <br><br>
     <% end %>
 
     <% if request.path_info.start_with?('/users') %>
       <h2>Hi <%= name %>!</h2>
+      <br><br>
     <% end %>
 
-    <br><br>
+
 
     <!-- This is where the page contents gets inserted -->
     <%= yield %>
 
     <br><br>
 
-    <% if request.path_info.start_with?('/users') %>
+    <% if request.path_info.start_with?('/home') %>
       <p><a href="/account">Account</a> // <a href="/logout">Log Out</a></p>
     <% else %>
-      <p><a href="/show">Main</a> // <a href="/logout">Log Out</a></p>
+      <p><a href="/home">Main</a> // <a href="/logout">Log Out</a></p>
     <% end %>
   </body>
 </html>

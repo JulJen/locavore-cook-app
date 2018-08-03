@@ -1,3 +1,5 @@
+require 'sinatra/flash'
+
 class ApplicationController < Sinatra::Base
   register Sinatra::ActiveRecordExtension
 
@@ -12,17 +14,69 @@ class ApplicationController < Sinatra::Base
     set :session_secret, "locavore_kitchen_secret"
   end
 
-  get '/' do
-    redirect '/main'
-  end
 
-  get '/main' do
+  get '/' do
     session.clear
     erb :'application/root', default_layout
   end
 
 
   helpers do
+#users_controller  and recipes_controller
+    def authenticate_user
+      if !logged_in?
+        redirect '/login'
+      end
+    end
+
+    def logged_in?
+      !!session[:user_id]
+    end
+
+    def current_user
+      @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    end
+
+    def current_username
+      @current_username ||= User.find(session[:username]) if session[:username]
+    end
+
+    def current_recipe
+      @current_recipe ||= Recipe.find_by(params[:id]) if session[:user_id] == current_user.id
+    end
+
+    def current_ingred
+      @current_ingred ||= Ingredient.find_by(params[:id]) if session[:user_id]
+    end
+
+    def titleize(str)
+      str.split(/ |\_/).map(&:capitalize).join(" ")
+    end
+
+#users_controller
+    def user_fields_empty?
+      # true if params.empty? rescue false
+      true if params[:fname] == "" || params[:lname] == "" || params[:username] == "" || params[:email] == "" || params[:password] == "" rescue false
+    end
+
+    def more_info_empty?
+      true if !params[:state].empty? && !params[:bio].empty? rescue false
+    end
+
+#RecipesController
+    def recipe_fields_empty?
+      true if params[:recipe][:name] == "" || params[:recipe][:content] == "" || params[:recipe][:directions] == "" || params[:recipe_ingredient][:name] == "" || params[:recipe_ingredient][:quantity] == "" rescue false
+    end
+
+    def user_recipe
+      @user.recipes.each do |recipe|
+        @user_recipe = "#{recipe.name.titleize}"
+      end
+    end
+
+    def sort_column
+      params[:sort] ? params[:sort].to_sym : :user_id
+    end
 
 #layouts
     def default_layout
@@ -60,64 +114,6 @@ class ApplicationController < Sinatra::Base
 
     def incomplete_message
       message = "Incorrect username and password!"
-    end
-
-    def name
-      if logged_in?
-        @user = User.find(session[:user_id])
-        @name = @user.username
-      end
-    end
-
-#users_controller  and recipes_controller
-    def logged_in?
-      if current_user
-        !!session[:user_id]
-      end
-    end
-
-    def current_user
-      @current_user ||= User.find(session[:user_id]) if session[:user_id]
-    end
-
-    def current_recipe
-      @current_recipe ||= Recipe.find_by(params[:id]) if session[:user_id] == current_user.id
-    end
-
-    def current_ingred
-      @current_ingred ||= Ingredient.find_by(params[:id]) if session[:user_id]
-    end
-
-    def titleize(str)
-      str.split(/ |\_/).map(&:capitalize).join(" ")
-    end
-
-#users_controller
-    def user_fields_empty?
-      true if params[:fname] == "" || params[:lname] == "" || params[:username] == "" || params[:email] == "" || params[:password] == "" rescue false
-    end
-
-    def more_info_empty?
-      params[:state] == "" && params[:bio] == ""
-    end
-
-    def log_in_empty?
-      true if params[:username] == "" &&  params[:password] == "" rescue false
-    end
-
-#RecipesController
-    def recipe_fields_empty?
-      true if params[:recipe][:name] == "" && params[:recipe][:content] == "" && params[:ingredient][:name] == "" && params[:recipe_ingredient][:quantity] == "" rescue false
-    end
-
-    def user_recipe
-      @user.recipes.each do |recipe|
-        @user_recipe = "#{recipe.name.titleize}"
-      end
-    end
-
-    def sort_column
-      params[:sort] ? params[:sort].to_sym : :user_id
     end
 
   end

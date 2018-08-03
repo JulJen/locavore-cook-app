@@ -1,4 +1,8 @@
 <body>
+  <% if !@user.recipes.length == 0  %>
+    <h3><a href="/recipes">Total recipes:</a> <%= @user.recipes.size %></h3>
+  <% end %>
+
   <% if !@recipe.name.blank? %>
     <h2>Recipe: <%= @recipe_name %></h2>
   <% else %>
@@ -6,7 +10,7 @@
   <% end %>
 
   <% if !@recipe.content.blank? %>
-    <h3>Recipe Headline:</h3><p><%= @recipe.content.capitalize %></p>
+    <h3>Recipe Headline: "<%= @recipe.content.capitalize %>"</h3>
   <% else %>
     <p> Oops <%= @user.username %>, missing headline! <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
   <% end %>
@@ -26,12 +30,10 @@
 
   <h3>Directions: </h3>
   <% if !@recipe.directions.blank? %>
-    <p><%= @recipe.directions.capitalize %></p>
+    <ul><li><%= @recipe.directions.capitalize %></li></ul>
   <% else %>
     <p> Oops <%= @user.username %>, missing directions! <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
   <% end %>
-
-  <br><br>
 
   <br><br>
 

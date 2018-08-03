@@ -1,16 +1,15 @@
 <body>
   <% if !@recipes.empty? %>
-  <h3>See Posts by <a href="/community/locavore_recipes">Locavore Community</a></h3>
-    <h3>Total posts: <%= @recipes.size %></h3>
+    <h2>Total recipes by:<h2>
+    <h3><a href="/community/locavore_recipes">Locavore Community:</a>  <%= @recipes.size %></h3>
+    <% if !@user.recipes.length == 0 %>
+      <h3><a href="/recipes">You:</a> <%= @user.recipes.size %></h3>
+    <% else %>
+      <br><br>
+      <p>Doesn't look like you have any recipes yet!</p>
+      <p>Create a <a href="/recipes/new">New Recipe</a></p>
+    <% end %>
   <% end %>
 
   <br><br>
-
-  <% if @user.recipes.length == 0 %>
-    <p>Doesn't look like you have any recipes yet!</p>
-  <% else %>
-    <p>Review all your <a href="/recipes">Recipes</a></p>
-    <p>OR</p>
-  <% end %>
-  <p>Create a <a href="/new">New Recipe</a></p>
 </body>

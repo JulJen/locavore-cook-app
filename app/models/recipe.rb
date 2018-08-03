@@ -3,7 +3,6 @@ class Recipe < ActiveRecord::Base
   has_many :recipe_ingredients
   has_many :ingredients, through: :recipe_ingredients
 
-  
   def slug
    self.name.gsub(" ", "-").downcase
   end

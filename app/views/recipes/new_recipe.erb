@@ -1,10 +1,15 @@
 <body>
   <form action="/recipes" method ="POST">
-    <label><b>Recipe name:</b></label>
-    <input id="new_recipe" type="text" name="recipe[name]" placeholder="Recipe Name:">
+
+    <label>Add Recipe Headline Tag:</label>
+    <input id="new_content" type="text" name="recipe[content]" placeholder="Recipe Headline:">
 
     <br><br>
 
+    <label>Recipe name:</label>
+    <input id="new_recipe" type="text" name="recipe[name]" placeholder="Recipe Name:">
+
+    <br><br>
 
     <% if !@recipes.nil? %>
       <% @recipe.ingredients.each do |ingredient| %>
@@ -25,11 +30,7 @@
     <br><br>
     <br></br>
 
-    <label>Add Headline Tag:</label>
-    <input id="new_content" type="text" name="recipe[content]" placeholder="Recipe Headline:">
 
-    <br><br>
-    <br><br>
 
     <label>Add Directions:</label>
     <input id="new_directions" type="text" name="recipe[directions]" placeholder="Directions:">

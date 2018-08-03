@@ -18,12 +18,15 @@ class IngredientsController < ApplicationController
 
 
   get '/ingredients/:id/edit' do
+binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
       @ingredient = Ingredient.find_by_id(params[:id])
 
-      erb :'/ingredients/edit_ingredient', default_layout
+      # if @recipe.user_id == @user.id
+        erb :'/ingredients/edit_ingredient', default_layout
+    
     else
       redirect '/login'
     end

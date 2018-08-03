@@ -1,75 +1,29 @@
 class UsersController < ApplicationController
 
-#user error essages
-#incomplete
-  get '/incomplete' do
-    if logged_in?
-      @user = User.find(session[:user_id])
-    end
-    erb :'users/user_failure', default_layout
-  end
-
-# incorrect
-  get '/failure' do
-    erb :'users/login_failure', default_layout
-  end
-
-# not logged in
-  get '/error' do
-    erb :'users/login_error', default_layout
-  end
-
-#returning user log-in
-  get '/login' do
-    if logged_in?
-      @user = User.find(session[:user_id])
-      redirect '/show'
-    else
-      erb :'users/login', default_layout
-    end
-  end
-
-  post '/login' do
-    if !log_in_empty?
-      @user = User.find_by(:username => params[:username])
-      if @user && @user.authenticate(params[:password])
-        session[:user_id] = @user.id
-        redirect '/show'
-      elsif !log_in_empty? && @current_user == nil
-        redirect '/failure'
-      else
-        redirect '/incomplete'
-      end 
-    end
-  end
-
-
 #new user sign-up
   get '/signup' do
     if logged_in?
-      redirect '/show'
+      redirect '/home'
     else
       erb :'users/signup', default_layout
     end
   end
 
   post '/signup' do
-    if logged_in?
-      redirect '/show'
-    elsif !logged_in? && !user_fields_empty?
-      @user = User.create(:fname => params[:fname], :lname => params[:lname], :email => params[:email], :username => params[:username], :password => params[:password])
-      @user.save
-      session[:user_id] = @user.id
-      redirect '/more_info'
-    elsif !logged_in? && user_fields_empty?
-      redirect '/incomplete'
+    if !logged_in? && !user_fields_empty?
+      @user = User.new(params)
+      # @user = User.new(:fname => params[:fname], :lname => params[:lname], :email => params[:email], :username => params[:username], :password => params[:password], state: params[:state], bio: params[:bio])
+      if @user.save
+        session[:user_id] = @user.id
+        session[:user_name] = @user.username
+        redirect '/more_info'
+      end
     else
       redirect '/signup'
     end
   end
 
   get '/more_info' do
-
     @user = User.find(session[:user_id])
     if current_user && logged_in?
       erb :'users/more_info'
@@ -79,37 +33,32 @@ class UsersController < ApplicationController
   end
 
   post '/more_info' do
-    if logged_in?
-      @user = User.find(session[:user_id])
+    @user = User.find(session[:user_id])
+    if !logged_in?
       if !more_info_empty?
         @user.update(state: params[:state], bio: params[:bio])
       elsif !params[:state].empty?
         @user.update(state: params[:state])
       elsif !params[:bio].empty?
         @user.update(bio: params[:bio])
+      redirect '/home'
       end
-      @user.save
-      redirect '/show'
     else
-      redirect '/failure'
+      redirect '/login'
     end
   end
 
 #user account info
-  get '/users/:slug' do
-    @user = User.find_by_slug(params[:slug])
-    @user = User.find(session[:user_id])
+  get '/home' do
+    # @user = User.find_by_slug(params[:slug])
+    # @user = User.find(session[:user_id])
+    @user = User.find_by_id(session[:user_id])
     @recipe = Recipe.find_by_id(params[:id])
 
     @recipes = Recipe.all
     erb :'users/show_user', default_layout
   end
 
-  get '/show' do
-    if logged_in?
-      redirect '/users/:slug'
-    end
-  end
 
   get '/account' do
     if logged_in?
@@ -129,7 +78,7 @@ class UsersController < ApplicationController
     end
   end
 
-  patch '/show' do
+  patch '/home' do
     if logged_in?
       @user = User.find(session[:user_id])
       if !more_info_empty?
@@ -146,15 +95,24 @@ class UsersController < ApplicationController
     end
   end
 
-#user log-out
-  get '/logout' do
-    if logged_in?
-      @current_user = nil
-      session.clear
-      redirect '/'
-    else
-      redirect '/failure'
+
+  #user error essages
+  #incomplete
+    get '/incomplete' do
+      if logged_in?
+        @user = User.find(session[:user_id])
+      end
+      erb :'users/user_failure', default_layout
     end
-  end
+
+  # incorrect
+    get '/failure' do
+      erb :'users/login_failure', default_layout
+    end
+
+  # not logged in
+    get '/error' do
+      erb :'users/login_error', default_layout
+    end
 
 end
