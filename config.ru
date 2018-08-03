@@ -7,6 +7,7 @@ use Rack::Static, :urls => ['/css'], :root => 'public' # Rack fix allows seeing 
 
 use Rack::MethodOverride
 
+use SessionsController
 use UsersController
 use RecipesController
 use IngredientsController
