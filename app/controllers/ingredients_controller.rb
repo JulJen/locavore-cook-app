@@ -27,7 +27,7 @@ class IngredientsController < ApplicationController
     end
   end
 
-  post '/ingredients/:id' do # see ingredients_controller for get '/recipes/:id/add'
+  post '/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
@@ -37,9 +37,9 @@ class IngredientsController < ApplicationController
         @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
         @recipe.recipe_ingredients << @recipe_ingredient
         @ingredient.recipe_ingredients << @recipe_ingredient
-
+    
         session[:success_create] = "Successfully added!"
-        redirect '/recipes'
+        redirect "/recipes/#{@recipe_ingredient.recipe_id}"
       else
         redirect '/recipes/failure'
       end
@@ -48,26 +48,27 @@ class IngredientsController < ApplicationController
     end
   end
 
-  get '/ingredients/:id/edit' do
+  get '/recipes/:recipe_id/ingredients/:id/edit' do
     if logged_in?
       @user = User.find(session[:user_id])
+      @recipe = Recipe.find_by_id(params[:id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
-      @ingredient = Ingredient.find_by_id(params[:id])
+      # @ingredient = Ingredient.find_by_id(params[:id])
 
       erb :'/ingredients/edit_ingredient', default_layout
-
     else
       redirect '/login'
     end
   end
 
-
   patch '/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
-
       @ingredient = Ingredient.find_by_id(params[:id])
       @recipe_ingredient = RecipeIngredient.find_by_id(params[:id])
+
+      @recipe = Recipe.find_by_id(params[:id])
+
       if !params[:ingredient][:name].empty? && params[:recipe_ingredient][:quantity].empty?
         @recipe_ingredient.update(name: params[:ingredient][:name])
         @ingredient.update(name: params[:ingredient][:name])
@@ -79,7 +80,7 @@ class IngredientsController < ApplicationController
       end
 
       session[:success_update] = "Successfully updated!"
-      redirect '/recipes'
+      redirect "/recipes/#{@recipe_ingredient.recipe_id}"
     else
       redirect '/login'
     end
@@ -94,7 +95,8 @@ class IngredientsController < ApplicationController
       if !@recipe_ingredient.blank?
         @recipe_ingredient.delete
       end
-      redirect '/recipes'
+      session[:success_update] = "Successfully updated!"
+      redirect "/recipes/#{@recipe_ingredient.recipe_id}"
     else
       redirect '/login'
     end

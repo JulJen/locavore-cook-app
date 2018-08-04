@@ -5,7 +5,7 @@
 
   <% if !@recipe.recipe_ingredients.empty? %>
     <% @recipe.recipe_ingredients.each do |ingredient| %>
-      <ul><li><a href="/ingredients/<%= ingredient.id %>/edit"><%= ingredient.quantity %> - <%= ingredient.name.titleize %></a></li></ul>
+      <ul><li><a href="/recipes/<%= ingredient.recipe_id %>/ingredients/<%= ingredient.id %>/edit"><%= ingredient.quantity %> - <%= ingredient.name.titleize %></a></li></ul>
     <% end %>
   <% else %>
     <p> Oops <%= @user.username %>, you don't have ingredients.</p>
