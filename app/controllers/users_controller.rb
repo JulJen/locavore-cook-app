@@ -13,9 +13,9 @@ class UsersController < ApplicationController
     if !logged_in? && !user_fields_empty?
       @user = User.new(params)
       # @user = User.new(:fname => params[:fname], :lname => params[:lname], :email => params[:email], :username => params[:username], :password => params[:password], state: params[:state], bio: params[:bio])
-      if @user.save
+      if @user.valid?
+        @user.save
         session[:user_id] = @user.id
-        session[:user_name] = @user.username
         redirect '/more_info'
       end
     else
@@ -51,7 +51,6 @@ class UsersController < ApplicationController
 #user account info
   get '/home' do
     # @user = User.find_by_slug(params[:slug])
-    # @user = User.find(session[:user_id])
     @user = User.find_by_id(session[:user_id])
     @recipe = Recipe.find_by_id(params[:id])
 
@@ -59,10 +58,13 @@ class UsersController < ApplicationController
     erb :'users/show_user', default_layout
   end
 
-
   get '/account' do
     if logged_in?
       @user = User.find(session[:user_id])
+
+      @success_account = session[:success_account]
+      session[:success_account] = nil
+
       erb :'users/show_account', default_layout
     else
       redirect '/login'
@@ -78,23 +80,26 @@ class UsersController < ApplicationController
     end
   end
 
-  patch '/home' do
+  patch '/account' do
     if logged_in?
       @user = User.find(session[:user_id])
       if !more_info_empty?
-        @user.update(state: params[:state], bio: params[:bio])
-      elsif !params[:state].empty?
-        @user.update(state: params[:state])
-      elsif !params[:bio].empty?
+        if !params[:state].empty?
+          @user.update(state: params[:state])
+        end
+        if !params[:bio].empty?
         @user.update(bio: params[:bio])
+        end
+
+        session[:success_account] = "Successfully updated account!"
+        redirect '/account'
+      else
+        redirect '/edit'
       end
-      @user.save
-      redirect '/account'
     else
       redirect '/login'
     end
   end
-
 
   #user error essages
   #incomplete

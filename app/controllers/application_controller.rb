@@ -14,8 +14,11 @@ class ApplicationController < Sinatra::Base
     set :session_secret, "locavore_kitchen_secret"
   end
 
-
   get '/' do
+    redirect '/welcome'
+  end
+
+  get '/welcome' do
     session.clear
     erb :'application/root', default_layout
   end
@@ -60,7 +63,7 @@ class ApplicationController < Sinatra::Base
     end
 
     def more_info_empty?
-      true if !params[:state].empty? && !params[:bio].empty? rescue false
+      true if !params[:state] == "" || params[:bio] == "" rescue false
     end
 
 #RecipesController
@@ -80,14 +83,12 @@ class ApplicationController < Sinatra::Base
 
 #layouts
     def default_layout
-      if request.path_info.start_with?('/main', '/signup', '/login')
+      if request.path_info.start_with?('/welcome', '/signup', '/login')
         {:layout => :'/layouts/signin'}
       elsif request.path_info.start_with?('/failure', '/incomplete')
         {:layout => :'/layouts/error'}
-      elsif request.path_info.start_with?('/recipe', '/recipes')
+      elsif request.path_info.start_with?('/recipe', '/recipes', '/ingredients')
         {:layout => :'/layouts/recipe'}
-      elsif request.path_info.start_with?('/ingredients')
-        {:layout => :'/layouts/ingredient'}
       elsif request.path_info.start_with?('/community')
         {:layout => :'/layouts/locavore_recipes'}
       else

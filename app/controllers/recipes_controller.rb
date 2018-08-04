@@ -26,7 +26,6 @@ class RecipesController  < ApplicationController
 
 
   post '/recipes' do
-binding.pry
     if logged_in?
       @user = User.find(session[:user_id])
       if !recipe_fields_empty?
@@ -39,6 +38,8 @@ binding.pry
         @recipe.recipe_ingredients << @recipe_ingredient
         @ingredient.recipe_ingredients << @recipe_ingredient
         @user.recipes << @recipe
+
+        session[:success_create] = "Successfully added!"
 
         redirect "/recipes/#{@recipe.id}"
       else
@@ -78,6 +79,12 @@ binding.pry
             @recipe_time = i.created_at
           end
         end
+
+        @success_create = session[:success_create]
+        session[:success_create] = nil
+
+        @success_update = session[:success_update]
+        session[:success_update] = nil
 
         erb :'/recipes/show_recipe', default_layout
       else
@@ -123,7 +130,7 @@ binding.pry
         @recipe.update(directions: params[:recipe][:directions])
       end
 
-      session[:success_message] = "Successfully created recipe."
+      session[:success_update] = "Successfully updated!"
 
       redirect "/recipes/#{@recipe.id}"
     else

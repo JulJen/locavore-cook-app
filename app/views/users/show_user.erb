@@ -1,8 +1,8 @@
 <body>
   <% if !@recipes.empty? %>
-    <h2>Total recipes by:<h2>
+    <h2>View recipes by:<h2>
     <h3><a href="/community/locavore_recipes">Locavore Community:</a>  <%= @recipes.size %></h3>
-    <% if !@user.recipes.length == 0 %>
+    <% if !@user.recipes.empty? %>
       <h3><a href="/recipes">You:</a> <%= @user.recipes.size %></h3>
     <% else %>
       <br><br>

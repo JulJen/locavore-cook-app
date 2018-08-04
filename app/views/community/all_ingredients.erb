@@ -1,14 +1,10 @@
 <body>
+  <p>Back to <a href="/community/locavore_recipes">Locavore Recipes</a></p>
 
   <h3>Ingredients: </h3>
 
   <% @recipe_ingredients.each do |ingred| %>
     <ul><li><a href="/community/ingredients/<%= ingred.id %>"><%= ingred.name.titleize %></a></li></ul>
   <% end %>
-
   <br><br>
-
-  <p>Back to <a href="/community/locavore_recipes">Locavore Recipes</a></p>
-
-
 </body>

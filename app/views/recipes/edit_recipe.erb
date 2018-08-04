@@ -2,8 +2,6 @@
 
   <h2>Edit "<%= @recipe_name %>":</h2>
 
-  <br><br>
-
   <label></label>
   <form action="/recipes/<%= @recipe.id %>" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
@@ -27,10 +25,6 @@
 
     <input type="submit" value="update">
   </form>
-
-  <p>OR</p>
-
-  <b><a href="/recipes/<%= @recipe.id %>/ingredients">Update ingredients</a></b>
 
   <br><br>
 

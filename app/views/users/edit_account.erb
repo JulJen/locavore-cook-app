@@ -2,7 +2,7 @@
   <h2>Hi <%= @user.username %>, edit your account info: </h2>
 
   <label></label>
-  <form action="/show" method="post">
+  <form action="/account" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
 
     <% if params[:state] == nil || params[:state] == "" %>

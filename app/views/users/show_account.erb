@@ -1,4 +1,8 @@
 <body>
+  <% if @success_account %>
+      <%= @success_account %>
+  <% end %>
+
   <h2>Account info: </h2>
 
   <h4>Username: <%= @user.username %></h4>
