@@ -4,6 +4,10 @@ class RecipesController  < ApplicationController
   get '/recipes' do
     if logged_in?
       @user = User.find(session[:user_id])
+
+      @success_delete = session[:success_delete]
+      session[:success_delete] = nil
+
       erb :'recipes/all_recipes'
     else
       redirect '/login'
@@ -17,6 +21,9 @@ class RecipesController  < ApplicationController
 
       @ingredients = Ingredient.all.order([:name])
       @recipe_ingredients = RecipeIngredient.all.order([:name])
+
+      @recipe_failure = session[:recipe_failure]
+      session[:recipe_failure] = nil
 
       erb :'recipes/new_recipe', default_layout
     else
@@ -40,10 +47,10 @@ class RecipesController  < ApplicationController
         @user.recipes << @recipe
 
         session[:success_create] = "Successfully added!"
-
         redirect "/recipes/#{@recipe.id}"
       else
-        redirect '/recipes/failure'
+        session[:recipe_failure] = "Recipe not saved. Fill in all fields."
+        redirect "/recipes/new"
       end
     else
       redirect 'login'
@@ -65,27 +72,17 @@ class RecipesController  < ApplicationController
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
 
-      if @recipe.user_id == @user.id
-
+      if !@recipe.nil? && current_recipe?
         @recipe_name = @recipe.name.titleize
-
-        @recipe.recipe_ingredients.each do |i|
-          @recipe_ingred = i.name
-          @recipe_quantity = i.quantity
-        end
-
-        def recipe_time
-          @recipe.each do |i|
-            @recipe_time = i.created_at
-          end
-        end
+        @recipe_content = @recipe.content.capitalize
+        @recipe_directions = @recipe.directions.capitalize
+        @username = @user.username
 
         @success_create = session[:success_create]
         session[:success_create] = nil
 
         @success_update = session[:success_update]
         session[:success_update] = nil
-
         erb :'/recipes/show_recipe', default_layout
       else
         redirect '/recipes'
@@ -157,6 +154,8 @@ class RecipesController  < ApplicationController
       if @recipe.user_id == current_user.id
         @recipe.delete
       end
+
+      session[:success_delete] = "Successfully deleted!"
       redirect "/recipes"
     else
       redirect "/login"
@@ -167,7 +166,7 @@ class RecipesController  < ApplicationController
   # * * * * work in progress * * * * *
 
   #community recipes
-  get '/community/locavore_recipes' do
+  get '/community/recipes' do
     if logged_in?
       @user = User.find(session[:user_id])
       @users = User.all
@@ -180,7 +179,13 @@ class RecipesController  < ApplicationController
     end
   end
 
-  get '/community/locavore_recipes/:user_id/:id' do
+  get '/community/recipes/:id' do
+    @recipe = Recipe.find_by_id(params[:id])
+
+    @recipe_name = @recipe.name.titleize
+    @recipe_content = @recipe.content.capitalize
+    @recipe_directions = @recipe.directions.capitalize
+
     if logged_in?
       @user = User.find(session[:user_id])
       @users = User.all
@@ -191,7 +196,7 @@ class RecipesController  < ApplicationController
     end
   end
 
-  get '/community/locavore_ingredients' do
+  get '/community/ingredients' do
     if logged_in?
       @user = User.find(session[:user_id])
       @users = User.all
@@ -204,7 +209,7 @@ class RecipesController  < ApplicationController
     end
   end
 
-  get '/community/locavore_ingredients/:id' do
+  get '/community/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
       @users = User.all

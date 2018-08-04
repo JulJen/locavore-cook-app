@@ -21,6 +21,9 @@ class IngredientsController < ApplicationController
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
 
+      @form_error = session[:form_error]
+      session[:form_error] = nil
+
       erb :'/ingredients/new_ingredient', default_layout
     else
       redirect '/login'
@@ -37,11 +40,12 @@ class IngredientsController < ApplicationController
         @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
         @recipe.recipe_ingredients << @recipe_ingredient
         @ingredient.recipe_ingredients << @recipe_ingredient
-    
+
         session[:success_create] = "Successfully added!"
         redirect "/recipes/#{@recipe_ingredient.recipe_id}"
       else
-        redirect '/recipes/failure'
+        session[:form_error] = "Please fill in all fields."
+        redirect "/recipes/#{@recipe.id}/ingredients/new"
       end
     else
       redirect '/login'

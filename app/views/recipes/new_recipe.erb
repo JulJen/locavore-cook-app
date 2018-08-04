@@ -1,4 +1,9 @@
 <body>
+  <% if @recipe_failure %>
+      <%= @recipe_failure %>
+      <br><br>
+  <% end %>
+
   <form action="/recipes" method ="POST">
 
     <label>(Optional) Add Recipe Headline Tag:</label>

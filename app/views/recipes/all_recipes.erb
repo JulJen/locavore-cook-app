@@ -1,5 +1,10 @@
 <body>
 
+  <% if @success_delete %>
+      <%= @success_delete %>
+      <br><br>
+  <% end %>
+
   <h2>All Recipes by <%= @user.username %>: </h2>
 
   <% if @user.recipes.length == 0 %>

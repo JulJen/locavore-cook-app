@@ -1,4 +1,8 @@
 <body>
+  <% if @form_error %>
+      <%= @form_error%>
+  <% end %>
+
   <h3>Add ingredients to: "<%= @recipe.name %>"</h3>
 
   <br></br>

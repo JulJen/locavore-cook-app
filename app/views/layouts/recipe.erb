@@ -5,7 +5,7 @@
   </head>
   <body>
     <% if request.path_info.start_with?('/recipes', '/ingredients') %>
-      <h1><a href="/home"><%= default_message %></a></h1>
+      <h1><a href="/recipes"><%= default_message %></a></h1>
     <% else %>
       <h1><%= default_message %></h1>
     <% end %>

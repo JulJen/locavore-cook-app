@@ -1,25 +1,33 @@
 <body>
-  <% if !@recipes.empty? %>
-    <% @recipes.each do |recipe| %>
-      <% if !recipe.name.empty? %>
-         <% recipe.name %>
-      <% end %>
-    <% end %>
+  <% if !@recipe.name.blank? %>
+    <h2>Recipe: <%= @recipe_name %></h2>
+  <% else %>
+    <h3> Oops, no recipe name! </h3>
   <% end %>
 
-  <h3>Recipe:</h3>
-
-  <br><br>
+  <% if !@recipe.content.blank? %>
+    <h3>Recipe Headline</a>: "<%= @recipe_content %>"</h3>
+  <% end %>
 
   <h3>Ingredients:</h3>
 
-  <br><br>
-
+  <% if !@recipe.ingredients.blank? %>
+    <% @recipe.ingredients.each do |ingredient| %>
+      <ul><li><%= ingredient.quantity %> - <%= ingredient.name.titleize %></a></li></ul>
+    <% end %>
+  <% else %>
+    <p> Oops, no ingredients.</p>
+  <% end %>
 
   <h3>Directions:</h3>
+  <% if !@recipe.directions.blank? %>
+    <ul><li><%= @recipe_directions %></li></ul>
+  <% else %>
+    <p> Oops, no directions! <a href="/recipes/<%= @recipe.id %>/edit">Edit recipe</a></p>
+  <% end %>
 
   <br><br>
 
-  <p>Back to <a href="/community/locavore_recipes">Locavore Recipes</a></p>
+  <p>Back to <a href="/community/recipes">Locavore Recipes</a></p>
 
 </body>

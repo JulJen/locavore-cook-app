@@ -44,12 +44,8 @@ class ApplicationController < Sinatra::Base
       @current_username ||= User.find(session[:username]) if session[:username]
     end
 
-    def current_recipe
-      @current_recipe ||= Recipe.find_by(params[:id]) if session[:user_id] == current_user.id
-    end
-
-    def current_ingred
-      @current_ingred ||= Ingredient.find_by(params[:id]) if session[:user_id]
+    def current_recipe?
+      @recipe.user_id == @user.id
     end
 
     def titleize(str)
@@ -69,12 +65,6 @@ class ApplicationController < Sinatra::Base
 #RecipesController
     def recipe_fields_empty?
       true if params[:recipe][:name] == "" || params[:recipe][:content] == "" || params[:recipe][:directions] == "" || params[:recipe_ingredient][:name] == "" || params[:recipe_ingredient][:quantity] == "" rescue false
-    end
-
-    def user_recipe
-      @user.recipes.each do |recipe|
-        @user_recipe = "#{recipe.name.titleize}"
-      end
     end
 
     def sort_column

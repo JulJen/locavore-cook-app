@@ -28,17 +28,5 @@
 
   <br><br>
 
-  <p>OR</p>
-
-  <p>Delete recipe: <b><%= @recipe_name %></b></p>
-
-  <form action="/recipes/<%= @recipe.id %>/delete" method="POST">
-    <input type="hidden" id="hidden" name="_method" value="delete">
-
-    <input type="submit" value="delete">
-  </form>
-
-  <br><br>
-
 </p>Back to <a href="/recipes/<%= @recipe.id %>">Recipe</a></p>
 </body>
