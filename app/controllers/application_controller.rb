@@ -145,5 +145,9 @@ class ApplicationController < Sinatra::Base
       message = "Successfully deleted"
     end
 
+    def state_zipcode
+     message = "U.S. state postal code should only be 2 characters long"
+    end
+
   end
 end

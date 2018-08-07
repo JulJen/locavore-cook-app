@@ -76,8 +76,8 @@ class UsersController < ApplicationController
     if logged_in?
       @user = User.find(session[:user_id])
 
-      @success_account = session[:success_account]
-      session[:success_account] = nil
+      @success_account = session[:success_update]
+      session[:success_update] = nil
 
       erb :'users/show_account', default_layout
     else
@@ -108,7 +108,7 @@ class UsersController < ApplicationController
         if !params[:bio].empty?
         @user.update(bio: params[:bio])
         end
-        session[:success_account] = "Successfully updated account!"
+        session[:success_update] = success_update
         redirect '/account'
       elsif params[:state].empty? && params[:bio].empty?
         session[:user_failure] = incomplete_message
@@ -121,24 +121,5 @@ class UsersController < ApplicationController
       redirect '/login'
     end
   end
-
-  #user error essages
-  #incomplete
-    get '/incomplete' do
-      if logged_in?
-        @user = User.find(session[:user_id])
-      end
-      erb :'users/user_failure', default_layout
-    end
-
-  # incorrect
-    get '/failure' do
-      erb :'users/login_failure', default_layout
-    end
-
-  # not logged in
-    get '/error' do
-      erb :'users/login_error', default_layout
-    end
 
 end
