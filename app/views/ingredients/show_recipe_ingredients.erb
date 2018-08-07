@@ -1,6 +1,14 @@
 <body>
   <h2>Recipe: <%= @recipe_name %></h2>
 
+  <% if @success_create %>
+    <%= @success_create %>
+  <% end %>
+
+  <% if @success_update %>
+    <%= @success_update %>
+  <% end %>
+
   <h3>Edit Ingredients or <a href="/recipes/<%= @recipe.id %>/ingredients/new">Add ingredients</a></h2>
 
   <% if !@recipe.recipe_ingredients.empty? %>

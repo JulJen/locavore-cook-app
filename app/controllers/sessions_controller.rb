@@ -6,6 +6,9 @@ class SessionsController  < ApplicationController
       @user = User.find(session[:user_id])
       redirect '/home'
     else
+      @user_failure = session[:user_failure]
+      session[:user_failure] = nil
+
       erb :'sessions/login', default_layout
     end
   end
@@ -16,10 +19,12 @@ class SessionsController  < ApplicationController
       if @user && @user.authenticate(params[:password])
         session[:user_id] = @user.id
         redirect '/home'
-      elsif !current_user
-        redirect '/failure'
+      else
+        session[:user_failure] = invalid_message
+        redirect '/login'
       end
-    else
+    else 
+      session[:user_failure] = incomplete_message
       redirect '/login'
     end
   end

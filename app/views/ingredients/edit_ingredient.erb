@@ -1,9 +1,13 @@
 <body>
   <h2>Ingredient: <%= @recipe_ingredient.name.titleize %></h2>
 
+  <% if @recipe_failure %>
+      <%= @recipe_failure %>
+  <% end %>
+
   <br><br>
 
-  <form action="/ingredients/<%= @recipe_ingredient.id %>" method="post">
+  <form action="/recipes/<%= @recipe.id %>/ingredients/<%= @recipe_ingredient.id %>" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">
 
     <label><b>Update ingredient: </b></label>

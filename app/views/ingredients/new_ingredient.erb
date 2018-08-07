@@ -1,13 +1,14 @@
 <body>
-  <% if @form_error %>
-      <%= @form_error%>
+
+  <% if @recipe_failure %>
+      <%= @recipe_failure %>
   <% end %>
 
   <h3>Add ingredients to: "<%= @recipe.name %>"</h3>
 
   <br></br>
 
-  <form action="/ingredients/<%= @recipe.id %>" method ="POST">
+  <form action="/recipes/<%= @recipe.id %>/ingredients" method ="POST">
 
     <label>Add new ingredient:</label>
     <input id="new_ingredient" type="text" name="ingredient[name]" placeholder="Ingredient:">

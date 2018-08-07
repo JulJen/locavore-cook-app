@@ -1,6 +1,10 @@
 <body>
   <h2>Hi <%= @user.username %>, edit your account info: </h2>
 
+  <% if @user_failure %>
+    <%= @user_failure %>
+  <% end %>
+
   <label></label>
   <form action="/account" method="post">
     <input type="hidden" id="hidden" name="_method" value="patch">

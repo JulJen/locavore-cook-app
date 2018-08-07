@@ -4,25 +4,34 @@
     <title>Locavore Kitchen App</title>
   </head>
   <body>
+
     <% if request.path_info.start_with?('/login') %>
       <h1><%= return_message %></h1>
       <h2>Log-in:</h2>
-    <% else %>
+    <% elsif request.path_info.start_with?('/signup') %>
       <h1><%= welcome_message %></h1>
+      <h2>Sign-up:</h2>
+    <% else %>
+      <h1><%= default_message %></h1>
+    <% end %>
+
+    <% if @user_error %>
+      <%= @user_error %>.
+      <p>Existing User? <a href="/login">Log-in</a></p>
+    <% end %>
+
+    <% if @user_failure == invalid_message %>
+      <%= @user_failure %>
+      <p>New User? <a href="/signup">Sign-up</a></p>
+    <% else %>
+      <%= @user_failure %>
+      <br><br>
     <% end %>
 
     <!-- This is where the page contents gets inserted -->
     <%= yield %>
 
     <br><br>
-
-    <% if request.path_info.start_with?('/signup') %>
-      <p>Existing User? <a href="/login">Log-in</a></p>
-    <% elsif request.path_info.start_with?('/login') %>
-      <p>New User? <a href="/signup">Sign-up</a></p>
-    <% else %>
-      <% yield %>
-    <% end %>
 
     <% if !request.path_info.start_with?('/welcome') %>
       <p>Return to <a href="/">Main Menu</a></p>

@@ -22,8 +22,8 @@ class RecipesController  < ApplicationController
       @ingredients = Ingredient.all.order([:name])
       @recipe_ingredients = RecipeIngredient.all.order([:name])
 
-      @recipe_failure = session[:recipe_failure]
-      session[:recipe_failure] = nil
+      @recipe_failure = session[:failure]
+      session[:failure] = nil
 
       erb :'recipes/new_recipe', default_layout
     else
@@ -36,20 +36,26 @@ class RecipesController  < ApplicationController
     if logged_in?
       @user = User.find(session[:user_id])
       if !recipe_fields_empty?
-        @recipe = Recipe.create(name: params[:recipe][:name], content: params[:recipe][:content], directions: params[:recipe][:directions])
+        @recipe = Recipe.new(name: params[:recipe][:name], content: params[:recipe][:content], directions: params[:recipe][:directions])
 
-        @recipe_ingredient = RecipeIngredient.create(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
+        @recipe_ingredient = RecipeIngredient.new(name: params[:ingredient][:name], quantity: params[:recipe_ingredient][:quantity])
 
-        @ingredient = Ingredient.create(name: params[:ingredient][:name])
+        @ingredient = Ingredient.new(name: params[:ingredient][:name])
 
-        @recipe.recipe_ingredients << @recipe_ingredient
-        @ingredient.recipe_ingredients << @recipe_ingredient
-        @user.recipes << @recipe
+        if @recipe.save && @recipe_ingredient.save && @ingredient.save
+          session[:recipe_id] = @recipe.id
 
-        session[:success_create] = "Successfully added!"
-        redirect "/recipes/#{@recipe.id}"
+          @recipe.recipe_ingredients << @recipe_ingredient
+          @ingredient.recipe_ingredients << @recipe_ingredient
+          @user.recipes << @recipe
+
+          session[:user_id] = @user.id
+
+          session[:success_create] = success_create
+          redirect "/recipes/#{@recipe.id}"
+        end
       else
-        session[:recipe_failure] = "Recipe not saved. Fill in all fields."
+        session[:failure] = incomplete_message
         redirect "/recipes/new"
       end
     else
@@ -57,15 +63,6 @@ class RecipesController  < ApplicationController
     end
   end
 
-  #recipe error messages
-    get '/recipes/failure' do
-      if logged_in?
-        @user = User.find(session[:user_id])
-        erb :'recipes/failure_recipe'
-      else
-        redirect '/login'
-      end
-    end
 
   get '/recipes/:id' do
     if logged_in?
@@ -96,16 +93,28 @@ class RecipesController  < ApplicationController
     if logged_in?
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
-      @recipe_name = @recipe.name.titleize
 
-      @recipe.recipe_ingredients.each do |i|
-        @recipe_quantity = "#{i.quantity}"
-      end
+      if !@recipe.nil? && current_recipe?
+        @recipe_name = @recipe.name.titleize
 
-      @recipe.ingredients.each do |i|
-        @recipe_ingred = "#{i.name.titleize}"
+        @recipe.recipe_ingredients.each do |i|
+          @recipe_quantity = "#{i.quantity}"
+        end
+
+        @recipe.ingredients.each do |i|
+          @recipe_ingred = "#{i.name.titleize}"
+        end
+
+        @success_update = session[:success_update]
+        session[:success_update] = nil
+
+        @recipe_failure = session[:failure]
+        session[:failure] = nil
+
+        erb :'/recipes/edit_recipe', default_layout
+      else
+        redirect '/recipes'
       end
-      erb :'/recipes/edit_recipe', default_layout
     else
       redirect '/login'
     end
@@ -117,19 +126,18 @@ class RecipesController  < ApplicationController
       @user = User.find(session[:user_id])
       @recipe = Recipe.find_by_id(params[:id])
 
-      if !params[:recipe][:name].empty?
-        @recipe.update(name: params[:recipe][:name])
-      end
-      if !params[:recipe][:content].empty?
+      if params[:recipe][:name] == "" && params[:recipe][:content] == "" && params[:recipe][:directions] == ""
+        session[:failure] = no_input
+        redirect "/recipes/#{@recipe.id}/edit"
+      elsif !params[:recipe][:name].empty?
+          @recipe.update(name: params[:recipe][:name])
+      elsif !params[:recipe][:content].empty?
         @recipe.update(content: params[:recipe][:content])
-      end
-      if !params[:recipe][:directions].empty?
+      elsif !params[:recipe][:directions].empty?
         @recipe.update(directions: params[:recipe][:directions])
       end
-
-      session[:success_update] = "Successfully updated!"
-
-      redirect "/recipes/#{@recipe.id}"
+        session[:success_update] = success_create
+        redirect "/recipes/#{@recipe.id}"
     else
       redirect '/login'
     end
@@ -155,7 +163,7 @@ class RecipesController  < ApplicationController
         @recipe.delete
       end
 
-      session[:success_delete] = "Successfully deleted!"
+      session[:success_delete] = success_delete
       redirect "/recipes"
     else
       redirect "/login"
@@ -172,25 +180,27 @@ class RecipesController  < ApplicationController
       @users = User.all
       @recipes = Recipe.all.order([:name])
       @recipe_ingredients = RecipeIngredient.all.order([:name])
-
-      erb :'/community/all_recipes', default_layout
+        erb :'/community/all_recipes', default_layout
     else
       redirect '/login'
     end
   end
 
   get '/community/recipes/:id' do
-    @recipe = Recipe.find_by_id(params[:id])
-
-    @recipe_name = @recipe.name.titleize
-    @recipe_content = @recipe.content.capitalize
-    @recipe_directions = @recipe.directions.capitalize
-
     if logged_in?
       @user = User.find(session[:user_id])
+      @recipe = Recipe.find_by_id(params[:id])
       @users = User.all
       @recipes = Recipe.all
-      erb :'/community/show_recipe', default_layout
+
+      if !@recipe.nil?
+        @recipe_name = @recipe.name.titleize
+        @recipe_content = @recipe.content.capitalize
+        @recipe_directions = @recipe.directions.capitalize
+        erb :'/community/show_recipe', default_layout
+      else
+        redirect '/community/recipes'
+      end
     else
       redirect '/login'
     end
@@ -201,7 +211,7 @@ class RecipesController  < ApplicationController
       @user = User.find(session[:user_id])
       @users = User.all
       @recipes = Recipe.all
-      @recipe_ingredients = RecipeIngredient.all.order([:name])
+      @recipe_ingredients = RecipeIngredient.all
 
       erb :'/community/all_ingredients', default_layout
     else
@@ -212,11 +222,18 @@ class RecipesController  < ApplicationController
   get '/community/ingredients/:id' do
     if logged_in?
       @user = User.find(session[:user_id])
+      @recipe_ingredient= RecipeIngredient.find_by_id(params[:id])
+
       @users = User.all
       @recipes = Recipe.all
-      @recipe_ingredients = RecipeIngredient.all.order(:name)
+      @recipe_ingredients = RecipeIngredient.all
 
-      erb :'/community/show_ingredient', default_layout
+      # @recipe_ingredients = RecipeIngredient.all.order(:name)
+      if !@recipe_ingredient.nil?
+        erb :'/community/show_ingredient', default_layout
+      else
+        redirect '/community/ingredients'
+      end 
     else
       redirect '/login'
     end

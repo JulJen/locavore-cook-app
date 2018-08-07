@@ -3,6 +3,10 @@
       <%= @success_account %>
   <% end %>
 
+  <% if @user_error %>
+      <%= @user_error %>
+  <% end %>
+
   <h2>Account info: </h2>
 
   <h4>Username: <%= @user.username %></h4>
@@ -10,8 +14,8 @@
   <h4>Email: <%= @user.email %></h4>
 
   <h2>About you: <h2>
-  <h4>State: <%= @user.state %></h4>
-  <h4><%= @user.username %> loves: <%= @user.bio %></h4>
+  <h4>State: <%= @user.state.upcase %></h4>
+  <h4><%= @user.username %> loves: <%= @user.bio.capitalize %></h4>
 
   <p>Update <a href="/edit">About You</a></p>
 </body>

@@ -8,6 +8,8 @@
   <h3>Where are you from? </h3>
 
   <form action="/more_info" method="POST">
+  <input type="hidden" id="hidden" name="_method" value="patch">
+
     <b><label for = "state">State postal code: </label></b>
       <input id="new_state" name="state" type="text" value="" placeholder="ex. NY, NJ, or PA">
 
@@ -24,5 +26,5 @@
 
   <br><br>
 
-  <p>Not sure if you want to add more info? <a href="/show">Skip ahead</a>!</p>
+  <p>Not sure if you want to add more info? <a href="/home">Skip ahead</a>!</p>
 </body>

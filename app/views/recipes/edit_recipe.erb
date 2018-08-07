@@ -1,4 +1,8 @@
 <body>
+  
+  <% if @recipe_failure %>
+      <%= @recipe_failure %>
+  <% end %>
 
   <h2>Edit "<%= @recipe_name %>":</h2>
 

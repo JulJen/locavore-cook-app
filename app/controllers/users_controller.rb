@@ -2,10 +2,17 @@ class UsersController < ApplicationController
 
 #new user sign-up
   get '/signup' do
-    if logged_in?
-      redirect '/home'
-    else
+    if !logged_in?
+
+      @user_failure = session[:user_failure]
+      session[:user_failure] = nil
+
+      @user_error = session[:user_error]
+      session[:user_error] = nil
+
       erb :'users/signup', default_layout
+    else
+      redirect '/home'
     end
   end
 
@@ -17,8 +24,12 @@ class UsersController < ApplicationController
         @user.save
         session[:user_id] = @user.id
         redirect '/more_info'
+      else
+        session[:user_error] = user_error
+        redirect "/signup"
       end
     else
+      session[:user_failure] = incomplete_message
       redirect '/signup'
     end
   end
@@ -32,7 +43,7 @@ class UsersController < ApplicationController
     end
   end
 
-  post '/more_info' do
+  patch '/more_info' do
     @user = User.find(session[:user_id])
     if !logged_in?
       if !more_info_empty?
@@ -51,11 +62,14 @@ class UsersController < ApplicationController
 #user account info
   get '/home' do
     # @user = User.find_by_slug(params[:slug])
-    @user = User.find_by_id(session[:user_id])
-    @recipe = Recipe.find_by_id(params[:id])
-
-    @recipes = Recipe.all
-    erb :'users/show_user', default_layout
+    if logged_in?
+      @user = User.find_by_id(session[:user_id])
+      @recipe = Recipe.find_by_id(params[:id])
+      @recipes = Recipe.all
+      erb :'users/show_user', default_layout
+    else
+      redirect '/login'
+    end
   end
 
   get '/account' do
@@ -74,6 +88,10 @@ class UsersController < ApplicationController
   get '/edit' do
     if logged_in?
       @user = User.find(session[:user_id])
+
+      @user_failure = session[:user_failure]
+      session[:user_failure] = nil
+
       erb :'/users/edit_account'
     else
       redirect '/login'
@@ -83,17 +101,20 @@ class UsersController < ApplicationController
   patch '/account' do
     if logged_in?
       @user = User.find(session[:user_id])
-      if !more_info_empty?
+      if !more_info_empty? && @user.valid?
         if !params[:state].empty?
           @user.update(state: params[:state])
         end
         if !params[:bio].empty?
         @user.update(bio: params[:bio])
         end
-
         session[:success_account] = "Successfully updated account!"
         redirect '/account'
+      elsif params[:state].empty? && params[:bio].empty?
+        session[:user_failure] = incomplete_message
+        redirect '/edit'
       else
+        session[:user_failure] = "U.S. state postal code should only be 2 characters long"
         redirect '/edit'
       end
     else

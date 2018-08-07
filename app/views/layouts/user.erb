@@ -6,6 +6,10 @@
   <body>
       <h1><a href="/recipes"><%= default_message %></a></h1>
 
+    <% if @user_failure %>
+      <%= @user_failure %>
+    <% end %>
+
     <!-- This is where the page contents gets inserted -->
     <%= yield %>
 
