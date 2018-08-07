@@ -13,8 +13,9 @@ gem 'require_all'
 gem 'bcrypt'
 gem 'rspec'
 gem 'rack'
-gem 'rack-flash3'
+gem 'sinatra-flash'
 gem "activemodel", require: "active_model"
+# gem 'friendly_id', '~> 5.2.0'
 
 group :development do
 		gem 'shotgun'
